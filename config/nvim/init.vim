@@ -152,6 +152,9 @@ Plug 'mhinz/vim-grepper'
 let g:grepper = {}
 let g:grepper.tools = ['grep', 'git', 'rg']
 
+" per project config
+Plug 'embear/vim-localvimrc'
+
 " Initialize plugin system
 call plug#end()
 
@@ -355,4 +358,4 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:yankring_clipboard_monitor = 0
 let g:yankring_history_dir = '~/.config/nvim/'
 
-let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.1/bin/python'
+let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.2/bin/python'
