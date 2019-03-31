@@ -43,16 +43,8 @@ Plug 'itchyny/lightline.vim'
 " Pending tasks list
 Plug 'fisadev/FixedTaskList.vim'
 
-" Ballerina
-Plug 'ballerina-attic/plugin-vim'
-
 " A Vim plugin which provides ways of navigating JSON document buffers.
 Plug 'mogelbrod/vim-jsonpath'
-
-" yapf
-Plug 'google/yapf', { 'rtp': 'plugins/vim', 'for': 'python' }
-
-Plug 'yuttie/comfortable-motion.vim'
 
 " Async autocompletion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -64,14 +56,8 @@ Plug 'zchee/deoplete-jedi', { 'do': ':UpdateRemotePlugins' }
 " from this plugin is disabled
 Plug 'davidhalter/jedi-vim'
 
-" decent defaults
-Plug 'tpope/vim-sensible'
-
 " comment code
 Plug 'tpope/vim-commentary'
-
-" Remove extraneous whitespace when edit mode is exited
-Plug 'thirtythreeforty/lessspace.vim'
 
 " git, fugitive
 Plug 'tpope/vim-fugitive'
@@ -100,9 +86,6 @@ Plug 'Townk/vim-autoclose'
 Plug 'inside/vim-search-pulse'
 
 " Code and files fuzzy finder
-" Plug 'ctrlpvim/ctrlp.vim'
-" Extension to ctrlp, for fuzzy command finder
-" Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
@@ -167,7 +150,7 @@ if vim_plug_just_installed
     :PlugInstall
 endif
 
-let g:vim_isort_python_version = 'python3'
+" let g:vim_isort_python_version = 'python3'
 
 " disable mouse navigation
 set mouse =""
@@ -257,8 +240,6 @@ map <F4> :TagbarToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 
-" Tasklist ------------------------------
-
 " show pending tasks list
 map <F2> :TaskList<CR>
 
@@ -290,9 +271,7 @@ let g:lightline = {
       \ }
 
 " Deoplete -----------------------------
-
 " Use deoplete.
-
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 1
@@ -301,7 +280,6 @@ let g:context_filetype#same_filetypes = {}
 let g:context_filetype#same_filetypes._ = '_'
 
 " Jedi-vim ------------------------------
-
 " Disable autocompletion (using deoplete instead)
 let g:jedi#completions_enabled = 0
 
@@ -316,20 +294,17 @@ let g:jedi#goto_assignments_command = ',a'
 nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
 " Ack.vim ------------------------------
-
 " mappings
 nmap ,r :Ack
 nmap ,wr :Ack <cword><CR>
 
 " Window Chooser ------------------------------
-
 " mapping
 nmap  -  <Plug>(choosewin)
 " show big letters
 let g:choosewin_overlay_enable = 1
 
 " Signify ------------------------------
-
 " this first setting decides in which order try to guess your current vcs
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = [ 'git', 'hg' ]
