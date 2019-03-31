@@ -139,7 +139,7 @@ Plug 'fatih/vim-go'
 Plug 'w0rp/ale'
 let g:ale_fixers = {'python': ['black', 'isort']}
 let g:ale_linters = {'python':['pylint', 'mypy']}
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
 let g:ale_fix_on_save = 1
 " only run linter on save
 let g:ale_lint_on_text_changed = 'never'
