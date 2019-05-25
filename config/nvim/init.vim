@@ -36,6 +36,10 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Now the actual plugins:
 
+" Pyhton
+" Plug 'python-mode/python-mode'
+" let g:pymode_python = 'python3'
+
 " lightline
 Plug 'itchyny/lightline.vim'
 
@@ -137,6 +141,9 @@ let g:grepper.tools = ['grep', 'git', 'rg']
 
 " per project config
 Plug 'embear/vim-localvimrc'
+
+" automatic save session
+Plug 'tpope/vim-obsession'
 
 " Initialize plugin system
 call plug#end()
