@@ -68,6 +68,7 @@ function docker.clean_images() {
 }
 
 source <(helm completion bash)
+source <(kubectl completion bash)
 
 KUBE_PS1_NS_ENABLE=false
 source "/home/pgranger/kube-ps1/kube-ps1.sh"
@@ -96,7 +97,7 @@ export GIT_EDITOR=$EDITOR
 
 export LIBTOOLIZE=glibtoolize
 
-export PATH=/usr/local/share/npm/bin:/usr/local/go/bin:~/.bin:/usr/local/bin:/usr/local/sbin:$HOME/Development/go/bin:/home/pgranger/.local/bin:$PATH
+export PATH=/home/pgranger/go/bin:/usr/local/share/npm/bin:/usr/local/go/bin:~/.bin:/usr/local/bin:/usr/local/sbin:$HOME/Development/go/bin:/home/pgranger/.local/bin:$PATH
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
@@ -159,8 +160,8 @@ if [ -e "$HOME/.local-bashrc" ]; then
 fi
 
 # Use git-completion if available
-if [ -e "$HOME/.git-completion.bash" ]; then
-  source "$HOME/.git-completion.bash"
+if [ -e "/usr/share/bash-completion/completions/git" ]; then
+  source "/usr/share/bash-completion/completions/git"
 fi;
 
 # Use bash-completion, if available
@@ -210,6 +211,8 @@ export GPG_TTY=$(tty)
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+export PATH="$HOME/.cargo/bin:$PATH"
+
 export PATH=$PATH:/home/pgranger/bin
 
 if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte-2.91.sh; fi # Ubuntu Budgie END
@@ -234,6 +237,19 @@ if [ -z "$VIRTUAL_ENV" ]; then
     eval "$(pyenv virtualenv-init -)"
 fi
 
-alias k=kubectl
+alias k="kubectl"
 alias kx=kubectx
+alias vi=nvim.appimage
 alias vim=nvim.appimage
+
+export PATH="$HOME/.poetry/bin:$PATH"
+export PATH=$PATH:$HOME/.linkerd2/bin
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+#kubectx and kubens
+export PATH=~/.kubectx:$PATH
+export PATH=$PATH:/home/pgranger/.local/share/tresorit/
+
