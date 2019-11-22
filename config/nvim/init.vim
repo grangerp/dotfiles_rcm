@@ -36,10 +36,6 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Now the actual plugins:
 
-" Pyhton
-" Plug 'python-mode/python-mode'
-" let g:pymode_python = 'python3'
-
 " lightline
 Plug 'itchyny/lightline.vim'
 
@@ -62,6 +58,9 @@ Plug 'davidhalter/jedi-vim'
 
 " comment code
 Plug 'tpope/vim-commentary'
+
+" Remove extraneous whitespace when edit mode is exited
+Plug 'thirtythreeforty/lessspace.vim'
 
 " git, fugitive
 Plug 'tpope/vim-fugitive'
@@ -121,10 +120,11 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'rust-lang/rust.vim'
 
 " golang
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go' , { 'do': ':GoInstallBinaries' }
+Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'w0rp/ale'
-let g:ale_fixers = {'python': ['black', 'isort']}
+let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier']}
 let g:ale_linters = {'python':['pylint', 'mypy']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
 let g:ale_fix_on_save = 1
@@ -134,20 +134,96 @@ let g:ale_open_list = 1
 " used nvim current dir so it use .config files
 let g:ale_python_pylint_change_directory = 0
 
+" let g:ale_linters = {'markdown':['vale']}
+" let g:ale_fixers={'markdown':['prettier']}
+
+" Markdown (:TableFormat)
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+
 " grepper
 Plug 'mhinz/vim-grepper'
 let g:grepper = {}
 let g:grepper.tools = ['grep', 'git', 'rg']
 
+" testing
+Plug 'janko-m/vim-test'
+let test#python#runner = 'pytest'
+let test#strategy = 'dispatch'
+
+Plug 'tpope/vim-dispatch'
+
+" class outline viewer
+Plug 'majutsushi/tagbar'
+
+" Dockerfile highlight + snippets for snipmate
+Plug 'ekalinin/Dockerfile.vim'
+
+" files tree
+Plug 'scrooloose/nerdtree'
+
+" nerdtree git
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
 " per project config
 Plug 'embear/vim-localvimrc'
 
-" automatic save session
+" JSON
+Plug 'elzr/vim-json'
+
+" Automatic save session
 Plug 'tpope/vim-obsession'
+
+" need to install shfmt
+Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
+
+
+" Swap window
+" Navigate to the window you'd like to move
+" Press <leader>ww
+" Navigate to the window you'd like to swap with
+" Press <leader>ww again
+Plug 'wesQ3/vim-windowswap'
+
 
 " Initialize plugin system
 call plug#end()
 
+set autowrite
+let mapleader = ","
+
+" go config, ledear is \
+" autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>t  <Plug>(go-test)
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+let g:go_fmt_command = "goimports"
+let g:go_list_type = "quickfix"
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_build_constraints = 1
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+
+let g:ale_linters = {'go':['govet', 'gometalinter']}
+" let g:ale_linters = {'go':[]}
+let g:go_metalinter_enabled = ['vet', 'errcheck']
+let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave_enabled = ['vet']
+
+" tagbar
+nmap <F8> :TagbarToggle<CR>
 
 " ============================================================================
 " Install plugins the first time vim runs
@@ -157,7 +233,7 @@ if vim_plug_just_installed
     :PlugInstall
 endif
 
-" let g:vim_isort_python_version = 'python3'
+let g:vim_isort_python_version = 'python3'
 
 " disable mouse navigation
 set mouse =""
@@ -247,6 +323,8 @@ map <F4> :TagbarToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 
+" Tasklist ------------------------------
+
 " show pending tasks list
 map <F2> :TaskList<CR>
 
@@ -270,10 +348,12 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+      \             [ 'obsession' ] ]
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
+      \   'gitbranch': 'fugitive#head',
+      \   'obsession': 'ObsessionStatus'
       \ },
       \ }
 
@@ -340,4 +420,4 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:yankring_clipboard_monitor = 0
 let g:yankring_history_dir = '~/.config/nvim/'
 
-let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.2/bin/python'
+let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.4/bin/python'
