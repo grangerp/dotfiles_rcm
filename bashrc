@@ -80,7 +80,6 @@ $(kube_ps1) \
 \e${RED_COLOR}${AWS_DEFAULT_PROFILE} \
 \e${GRAY_COLOR}in \e${GREEN_COLOR}\w\
 \e${GRAY_COLOR}`vcprompt`\
-`backgroundjobs`\
 \e${DEFAULT_COLOR}'
 
 
@@ -151,10 +150,6 @@ function cleanpycache() {
   find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
 }
 
-function tfree() {
-  top -l1 -s0 | head -n11
-}
-
 if [ -e "$HOME/.local-bashrc" ]; then
   source "$HOME/.local-bashrc"
 fi
@@ -179,32 +174,10 @@ export PROMPT="${BASEPROMPT}
 $ "
 export PS1=$PROMPT
 
-function docker.clean_containers() {
-    docker rm $(docker ps -a | grep -v Up | grep -v CONTAINER | cut -f 1 -d ' ')
-}
-
-function docker.clean_images() {
-    docker rmi $(docker images | grep none | tr -s ' ' | cut -f 3 -d ' ')
-}
-
 function git.remove_untracked_remote_branch(){
-    # fetch and prune remte
+    # fetch and prune remote
     # delete all local branch with no remote
     git fetch -p && git branch -vv | grep gone |gawk '{print $1}' | xargs git branch -d
-}
-
-function docker.clean_volumes(){
-    docker volume rm $(docker volume ls -qf dangling=true)
-}
-
-function list_stashes(){
-    # list stashes and if mounted or not
-    echo -e "mounted\tstash"
-    for STASH in $(gnome-encfs-manager list_stashes|gawk '{ print $1};')
-    do
-        local myres=$(gnome-encfs-manager is_mounted $STASH)
-        echo -e "$myres\t$STASH"
-    done
 }
 
 export GPG_TTY=$(tty)
@@ -252,4 +225,3 @@ export NVM_DIR="$HOME/.nvm"
 #kubectx and kubens
 export PATH=~/.kubectx:$PATH
 export PATH=$PATH:/home/pgranger/.local/share/tresorit/
-
