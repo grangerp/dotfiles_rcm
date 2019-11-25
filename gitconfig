@@ -1,11 +1,6 @@
 [github]
   user = grangerp
 
-[user]
-  email = github@grangerp.com
-  name = Philippe Granger
-	signingkey = 4232AF0AC9F3AA21ECB943B093EE99D00D05A72F
-
 [color]
   ui = auto
 
@@ -63,6 +58,7 @@
 	spellcheck = false
 [credential]
 	helper = store
-
+[include]
+    path = ~/.gitconfig.local
 [rerere]
 	enabled = true
