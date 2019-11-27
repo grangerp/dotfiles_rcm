@@ -212,6 +212,7 @@ fi
 
 alias k="kubectl"
 alias kx=kubectx
+alias ke="k get events --sort-by .lastTimestamp"
 alias vi=nvim.appimage
 alias vim=nvim.appimage
 
