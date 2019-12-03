@@ -120,7 +120,7 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'rust-lang/rust.vim'
 
 " golang
-Plug 'fatih/vim-go' , { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go' , { 'tag': 'v1.21', 'do': ':GoInstallBinaries' }
 Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'w0rp/ale'
@@ -216,11 +216,12 @@ endfunction
 
 autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 
-let g:ale_linters = {'go':['govet', 'gometalinter']}
+let g:ale_linters = {'go':['govet', 'gometalinter', 'golangci_lint']}
 " let g:ale_linters = {'go':[]}
 let g:go_metalinter_enabled = ['vet', 'errcheck']
 let g:go_metalinter_autosave = 1
 let g:go_metalinter_autosave_enabled = ['vet']
+
 
 " tagbar
 nmap <F8> :TagbarToggle<CR>
