@@ -9,3 +9,9 @@ layout_poetry() {
   export POETRY_ACTIVE=1
   PATH_add "$VENV"
 }
+
+layout_golang() {
+  export GOPATH="$PWD/vendor:$PWD"
+  PATH_add "$PWD/vendor/bin"
+  PATH_add bin
+}
