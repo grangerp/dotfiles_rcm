@@ -120,8 +120,10 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'rust-lang/rust.vim'
 
 " golang
-Plug 'fatih/vim-go' , { 'tag': 'v1.21', 'do': ':GoInstallBinaries' }
+" Plug 'fatih/vim-go' , { 'tag': 'v1.21', 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go' , { 'do': ':GoInstallBinaries' }
 Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 
 Plug 'w0rp/ale'
 let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier']}
@@ -134,12 +136,14 @@ let g:ale_open_list = 1
 " used nvim current dir so it use .config files
 let g:ale_python_pylint_change_directory = 0
 
-" let g:ale_linters = {'markdown':['vale']}
-" let g:ale_fixers={'markdown':['prettier']}
 
 " Markdown (:TableFormat)
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+let g:ale_linters = {'markdown':['vale']}
+"let g:ale_fixers={'markdown':['prettier']}
+let g:vim_markdown_folding_disabled = 1
+
 
 " grepper
 Plug 'mhinz/vim-grepper'
@@ -185,6 +189,9 @@ Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 " Press <leader>ww again
 Plug 'wesQ3/vim-windowswap'
 
+" tmux conf syntax highlight
+Plug 'tmux-plugins/vim-tmux'
+
 
 " Initialize plugin system
 call plug#end()
@@ -192,13 +199,16 @@ call plug#end()
 set autowrite
 let mapleader = ","
 
-" go config, ledear is \
-" autocmd FileType go nmap <leader>b  <Plug>(go-build)
+" go config, ledear is ,
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
 autocmd FileType go nmap <leader>t  <Plug>(go-test)
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 let g:go_fmt_command = "goimports"
-let g:go_list_type = "quickfix"
+" let g:go_list_type = "quickfix"
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
@@ -216,11 +226,13 @@ endfunction
 
 autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 
-let g:ale_linters = {'go':['govet', 'gometalinter', 'golangci_lint']}
-" let g:ale_linters = {'go':[]}
-let g:go_metalinter_enabled = ['vet', 'errcheck']
+" let g:ale_linters = {'go':['govet', 'golangci_lint']}
+let g:ale_linters = {'go':[]}
+" let g:go_metalinter_enabled = ['vet', 'errcheck']
+" g:go_metalinter_command='golangci-lint'
+let g:go_metalinter_enabled = ['golangci-lint']
 let g:go_metalinter_autosave = 1
-let g:go_metalinter_autosave_enabled = ['vet']
+let g:go_metalinter_autosave_enabled = ['vet', 'golint']
 
 
 " tagbar
@@ -421,4 +433,4 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:yankring_clipboard_monitor = 0
 let g:yankring_history_dir = '~/.config/nvim/'
 
-let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.4/bin/python'
+let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.5/bin/python'
