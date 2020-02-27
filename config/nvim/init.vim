@@ -120,8 +120,8 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'rust-lang/rust.vim'
 
 " golang
-" Plug 'fatih/vim-go' , { 'tag': 'v1.21', 'do': ':GoInstallBinaries' }
-Plug 'fatih/vim-go' , { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go' , { 'tag': 'v1.22', 'do': ':GoInstallBinaries' }
+" Plug 'fatih/vim-go' , { 'do': ':GoInstallBinaries' }
 Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'ctrlpvim/ctrlp.vim'
 
@@ -373,11 +373,11 @@ let g:lightline = {
 " Deoplete -----------------------------
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
+" let g:deoplete#enable_ignore_case = 1
+" let g:deoplete#enable_smart_case = 1
 " complete with words from any opened file
-let g:context_filetype#same_filetypes = {}
-let g:context_filetype#same_filetypes._ = '_'
+" let g:context_filetype#same_filetypes = {}
+" let g:context_filetype#same_filetypes._ = '_'
 
 " Jedi-vim ------------------------------
 " Disable autocompletion (using deoplete instead)
