@@ -1,0 +1,16 @@
+rules:
+  - folders:
+      - /home/pgranger/Camera Uploads
+      - ~/Downloads/test picture
+    actions:
+      - python: |
+          from pathlib import Path
+          if path.is_file:
+            path_splitted=path.name.split('-')
+            if len(path_splitted) >= 3:
+              year, month, *_ = path_splitted
+              new_path = path.parent/year/month/path.name
+              new_path.parent.mkdir(parents=True,exist_ok=True)
+              path.rename(new_path)
+
+    subfolders: false
