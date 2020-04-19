@@ -55,6 +55,7 @@ Plug 'deoplete-plugins/deoplete-jedi', { 'do': ':UpdateRemotePlugins' }
 " Just to add the python go-to-definition and similar features, autocompletion
 " from this plugin is disabled
 Plug 'davidhalter/jedi-vim'
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 
 " comment code
 Plug 'tpope/vim-commentary'
@@ -119,13 +120,7 @@ Plug 'machakann/vim-highlightedyank'
 " rust
 Plug 'rust-lang/rust.vim'
 
-" golang
-Plug 'fatih/vim-go' , { 'tag': 'v1.22', 'do': ':GoInstallBinaries' }
-" Plug 'fatih/vim-go' , { 'do': ':GoInstallBinaries' }
-Plug 'AndrewRadev/splitjoin.vim'
-" Plug 'ctrlpvim/ctrlp.vim'
-
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier']}
 let g:ale_linters = {'python':['pylint', 'mypy']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
@@ -192,28 +187,56 @@ Plug 'wesQ3/vim-windowswap'
 " tmux conf syntax highlight
 Plug 'tmux-plugins/vim-tmux'
 
+" golang
+"Plug 'fatih/vim-go' , { 'tag': 'v1.22', 'do': ':GoInstallBinaries' }
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'AndrewRadev/splitjoin.vim'
+
+" Activity watch
+Plug 'ActivityWatch/aw-watcher-vim'
+
+
+" change case, camel, kebab, etc
+Plug 'tpope/vim-abolish'
+
+" change hyphen case to camek case
+Plug 'chiedo/vim-case-convert'
 
 " Initialize plugin system
 call plug#end()
 
+
+" ============================================================================
+" Install plugins the first time vim runs
+
+if vim_plug_just_installed
+	echo "Installing Bundles, please ignore key map error messages"
+    :PlugInstall
+endif
+
 set autowrite
 let mapleader = ","
 
-" go config, ledear is ,
-map <C-n> :cnext<CR>
-map <C-m> :cprevious<CR>
-nnoremap <leader>a :cclose<CR>
-autocmd FileType go nmap <leader>b  <Plug>(go-build)
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
-autocmd FileType go nmap <leader>t  <Plug>(go-test)
+" golang vim-go
+"noremap <C-y> :cnext<CR>
+"noremap <C-m> :cprevious<CR>
+"nnoremap <leader>a :cclose<CR>
+
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-let g:go_fmt_command = "goimports"
-" let g:go_list_type = "quickfix"
+
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
+
+let g:go_metalinter_autosave = 1
+
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
   let l:file = expand('%')
@@ -225,26 +248,14 @@ function! s:build_go_files()
 endfunction
 
 autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+let g:go_fmt_command = "goimports"
+let g:go_rename_command = 'gopls'
 
-" let g:ale_linters = {'go':['govet', 'golangci_lint']}
-let g:ale_linters = {'go':[]}
-" let g:go_metalinter_enabled = ['vet', 'errcheck']
-" g:go_metalinter_command='golangci-lint'
-let g:go_metalinter_enabled = ['golangci-lint']
-let g:go_metalinter_autosave = 1
-let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+"call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 
 
 " tagbar
 nmap <F8> :TagbarToggle<CR>
-
-" ============================================================================
-" Install plugins the first time vim runs
-
-if vim_plug_just_installed
-	echo "Installing Bundles, please ignore key map error messages"
-    :PlugInstall
-endif
 
 let g:vim_isort_python_version = 'python3'
 

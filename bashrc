@@ -215,6 +215,7 @@ alias kx=kubectx
 alias ke="k get events --sort-by .lastTimestamp"
 alias vi=nvim.appimage
 alias vim=nvim.appimage
+alias sq="cd ~/w/process-deployment-operator; ~/Downloads/sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.projectKey=pdd  -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000  -Dsonar.login=3cb6f826242631230b885ab302d66b04023256eb -Dsonar.go.coverage.reportPaths=cover.out"
 
 export PATH="$HOME/.poetry/bin:$PATH"
 export PATH=$PATH:$HOME/.linkerd2/bin
@@ -226,3 +227,12 @@ export NVM_DIR="$HOME/.nvm"
 #kubectx and kubens
 export PATH=~/.kubectx:$PATH
 export PATH=$PATH:/home/pgranger/.local/share/tresorit/
+
+# invoke completion
+source <(inv --print-completion-script bash)
+
+export DOCKER_BUILDKIT=1
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash
