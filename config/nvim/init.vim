@@ -203,6 +203,9 @@ Plug 'tpope/vim-abolish'
 " change hyphen case to camek case
 Plug 'chiedo/vim-case-convert'
 
+" Alternate between files
+Plug 'tpope/vim-projectionist'
+
 " Initialize plugin system
 call plug#end()
 
@@ -359,7 +362,7 @@ nmap ,e :Files<CR>
 " tags (symbols) in current file finder mapping
 nmap ,g :BTag<CR>
 " tags (symbols) in all files finder mapping
-nmap ,G :Tag<CR>
+nmap ,G :Tags<CR>
 " general code finder in current file mapping
 nmap ,f :BLines<CR>
 " general code finder in all files mapping
@@ -444,4 +447,4 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:yankring_clipboard_monitor = 0
 let g:yankring_history_dir = '~/.config/nvim/'
 
-let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.7.6/bin/python'
+let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.8.5/bin/python'
