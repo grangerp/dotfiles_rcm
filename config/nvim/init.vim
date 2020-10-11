@@ -96,6 +96,11 @@ Plug 'junegunn/fzf.vim'
 " Terminal Vim with 256 colors colorscheme
 Plug 'fisadev/fisa-vim-colorscheme'
 
+" Terminal
+Plug 'jnurmine/Zenburn'
+" Gui
+Plug 'altercation/vim-colors-solarized'
+
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 
@@ -121,8 +126,8 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'rust-lang/rust.vim'
 
 Plug 'dense-analysis/ale'
-let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier']}
-let g:ale_linters = {'python':['pylint', 'mypy']}
+let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier'], 'go':['goimports'],  'javascript': ['eslint']}
+let g:ale_linters = {'python':['pylint', 'mypy'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
 let g:ale_fix_on_save = 1
 " only run linter on save
@@ -135,7 +140,7 @@ let g:ale_python_pylint_change_directory = 0
 " Markdown (:TableFormat)
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
-let g:ale_linters = {'markdown':['vale']}
+"let g:ale_linters = {'markdown':['vale']}
 "let g:ale_fixers={'markdown':['prettier']}
 let g:vim_markdown_folding_disabled = 1
 
@@ -203,8 +208,38 @@ Plug 'tpope/vim-abolish'
 " change hyphen case to camek case
 Plug 'chiedo/vim-case-convert'
 
+" asciidoc
+Plug 'habamax/vim-asciidoctor'
+let g:asciidoctor_fenced_languages = ['python', 'go', 'yaml']
+" Plug 'dahu/vim-asciidoc'
+" Plug 'matcatc/vim-asciidoc-folding'
+
+
+" coverage
+Plug 'mgedmin/coverage-highlight.vim'
+
+" Restructured text
+Plug 'nvie/vim-rst-tables'
+
+" note taking
+"Plug 'fmoralesc/vim-pad'
+
+Plug 'google/vim-maktaba'
+Plug 'bazelbuild/vim-bazel'
+
+" Show map when stalled and multiple options are available
+Plug 'fcpg/vim-showmap'
+
 " Alternate between files
 Plug 'tpope/vim-projectionist'
+
+" typescirpt
+Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+" For Denite features
+Plug 'Shougo/denite.nvim'
+
 
 " Initialize plugin system
 call plug#end()
@@ -238,7 +273,7 @@ let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
 
-let g:go_metalinter_autosave = 1
+"let g:go_metalinter_autosave = 1
 
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
@@ -303,6 +338,8 @@ if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256') || has('nvim')
 	let &t_Co = 256
     colorscheme fisa
     " colorscheme nova
+    " colorscheme solarized
+    " colorscheme zenburn
 else
     colorscheme delek
 endif
@@ -432,6 +469,10 @@ highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
 highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+
+" TYPESCRIPT
+" use prettier to format code
+autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 
 " Autoclose ------------------------------
 
