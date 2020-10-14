@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Inspired greatly by Armin Ronacher's bashrc
+
 # https://github.com/mitsuhiko/dotfiles/blob/master/bash/bashrc
 
 # If not running interactively, don't do anything
@@ -216,6 +217,7 @@ alias ke="k get events --sort-by .lastTimestamp"
 alias vi=nvim.appimage
 alias vim=nvim.appimage
 alias sq="cd ~/w/process-deployment-operator; ~/Downloads/sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.projectKey=pdd  -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000  -Dsonar.login=3cb6f826242631230b885ab302d66b04023256eb -Dsonar.go.coverage.reportPaths=cover.out"
+alias pvpn="sudo /home/pgranger/.local/bin/protonvpn"
 
 export PATH="$HOME/.poetry/bin:$PATH"
 export PATH=$PATH:$HOME/.linkerd2/bin
