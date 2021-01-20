@@ -127,7 +127,7 @@ Plug 'rust-lang/rust.vim'
 
 Plug 'dense-analysis/ale'
 let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier'], 'go':['goimports'],  'javascript': ['eslint']}
-let g:ale_linters = {'python':['pylint', 'mypy'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint']}
+let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
 let g:ale_fix_on_save = 1
 " only run linter on save
@@ -239,6 +239,15 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 " For Denite features
 Plug 'Shougo/denite.nvim'
+
+" Java autocomplete
+Plug 'artur-shaik/vim-javacomplete2'
+" Java completion
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+autocmd FileType java JCEnable
+
+" file browser
+Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 
 
 " Initialize plugin system
@@ -488,4 +497,4 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:yankring_clipboard_monitor = 0
 let g:yankring_history_dir = '~/.config/nvim/'
 
-let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.8.5/bin/python'
+let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.8.6/bin/python'

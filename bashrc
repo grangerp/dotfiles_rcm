@@ -7,21 +7,21 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-DEFAULT_COLOR="[00;1m"
-GRAY_COLOR="[37;1m"
-PINK_COLOR="[35;1m"
-GREEN_COLOR="[32;1m"
-CYAN_COLOR="[36;1m"
+export DEFAULT_COLOR="[00;1m"
+export GRAY_COLOR="[37;1m"
+export PINK_COLOR="[35;1m"
+export GREEN_COLOR="[32;1m"
+export CYAN_COLOR="[36;1m"
 ORANGE_COLOR="[33;1m"
 RED_COLOR="[31;1m"
-if [ `id -u` == '0' ]; then
+if [ "$(id -u)" == '0' ]; then
   USER_COLOR=$RED_COLOR
 else
-  USER_COLOR=$ORANGE_COLOR
+  export USER_COLOR=$ORANGE_COLOR
 fi
 
-VCPROMPT_EXECUTABLE=/usr/local/bin/vcprompt
-SSHUTTLE_EXECUTABLE=/usr/local/bin/sshuttle
+VCPROMPT_EXECUTABLE=~/bin/vcprompt
+export SSHUTTLE_EXECUTABLE=/usr/local/bin/sshuttle
 
 function vcprompt() {
   if [ -e "$VCPROMPT_EXECUTABLE" ]; then
@@ -61,14 +61,16 @@ function activevirtualenv() {
 
 
 function docker.clean_containers() {
-	 docker rm $(docker ps -a | grep -v Up | grep -v CONTAINER | cut -f 1 -d ' ')
+	 docker rm "$(docker ps -a | grep -v Up | grep -v CONTAINER | cut -f 1 -d ' ')"
  }
 
 function docker.clean_images() {
-    docker rmi $(docker images | grep none | tr -s ' ' | cut -f 3 -d ' ')
+    docker rmi "$(docker images | grep none | tr -s ' ' | cut -f 3 -d ' ')"
 }
 
+# shellcheck source=/dev/null
 source <(helm completion bash)
+# shellcheck source=/dev/null
 source <(kubectl completion bash)
 
 KUBE_PS1_NS_ENABLE=false
@@ -97,24 +99,10 @@ export GIT_EDITOR=$EDITOR
 
 export LIBTOOLIZE=glibtoolize
 
-export PATH=/home/pgranger/go/bin:/usr/local/share/npm/bin:/usr/local/go/bin:~/.bin:/usr/local/bin:/usr/local/sbin:$HOME/Development/go/bin:/home/pgranger/.local/bin:$PATH
+export PATH=/home/pgranger/go/bin:/usr/local/bin:/usr/local/sbin:/home/pgranger/.local/bin:$PATH
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
-
-# virtualenvwrapper and pip
-if [ `id -u` != '0' ]; then
-  export VIRTUAL_ENV_DISABLE_PROMPT=1
-  export VIRTUALENV_USE_DISTRIBUTE=1
-  export WORKON_HOME=$HOME/.virtualenvs
-  export PIP_VIRTUALENV_BASE=$WORKON_HOME
-  export PIP_REQUIRE_VIRTUALENV=true
-  export PIP_RESPECT_VIRTUALENV=true
-  export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-  if [ -e "/usr/local/bin/virtualenvwrapper.sh" ]; then
-    source /usr/local/bin/virtualenvwrapper.sh
-  fi
-fi
 
 # Enable bash history
 export HISTCONTROL=erasedups
@@ -168,9 +156,6 @@ if [ -f /usr/local/etc/bash_completion ]; then
   . /usr/local/etc/bash_completion
 fi
 
-[[ -s ~/.rvm/scripts/rvm ]] && source ~/.rvm/scripts/rvm  # This loads RVM into a shell session.
-
-
 export PROMPT="${BASEPROMPT}
 $ "
 export PS1=$PROMPT
@@ -185,11 +170,7 @@ export GPG_TTY=$(tty)
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-export PATH="$HOME/.cargo/bin:$PATH"
-
-export PATH=$PATH:/home/pgranger/bin
-
-if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte-2.91.sh; fi # Ubuntu Budgie END
+if [ "$TILIX_ID" ] || [ "$VTE_VERSION" ] ; then source /etc/profile.d/vte-2.91.sh; fi # Ubuntu Budgie END
 
 function aws.profile {
     export AWS_DEFAULT_PROFILE=$1
@@ -217,10 +198,15 @@ alias ke="k get events --sort-by .lastTimestamp"
 alias vi=nvim.appimage
 alias vim=nvim.appimage
 alias sq="cd ~/w/process-deployment-operator; ~/Downloads/sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.projectKey=pdd  -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000  -Dsonar.login=3cb6f826242631230b885ab302d66b04023256eb -Dsonar.go.coverage.reportPaths=cover.out"
-alias pvpn="sudo /home/pgranger/.local/bin/protonvpn"
+alias pvpn="protonvpn-cli"
+
+function eaivpn() {
+    cd ~/Documents/forticlientsslvpn/64bit/
+    sudo ./forticlientsslvpn_cli --server eai-vpn.elmt.io:443 --vpnuser pgranger@elementai.com
+    cd -
+}
 
 export PATH="$HOME/.poetry/bin:$PATH"
-export PATH=$PATH:$HOME/.linkerd2/bin
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -234,6 +220,7 @@ export PATH=$PATH:/home/pgranger/.local/share/tresorit/
 source <(inv --print-completion-script bash)
 
 export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
 
 . $HOME/.asdf/asdf.sh
 
