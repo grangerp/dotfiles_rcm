@@ -38,27 +38,13 @@ function lastcommandfailed() {
   fi
 }
 
-function backgroundjobs() {
-  jobs|python -c 'if 1:
-    import sys
-    items = ["\033[36;1m%s\033[37;1m" % x.split()[2]
-             for x in sys.stdin.read().splitlines()]
-    if items:
-      if len(items) > 2:
-        string = "%s, and %s" % (", ".join(items[:-1]), items[-1])
-      else:
-        string = ", ".join(items)
-      print("\033[37;1m running %s" % string)
-  '
-}
 
 function activevirtualenv() {
   if [ -n "$VIRTUAL_ENV" ]; then
       echo -n $'\033[00;1m:\033[36;1m'
-      echo -n "$(basename $VIRTUAL_ENV)"
+      echo -n "$(basename "$VIRTUAL_ENV")"
   fi
 }
-
 
 function docker.clean_containers() {
 	 docker rm "$(docker ps -a | grep -v Up | grep -v CONTAINER | cut -f 1 -d ' ')"
@@ -74,17 +60,18 @@ source <(helm completion bash)
 source <(kubectl completion bash)
 
 KUBE_PS1_NS_ENABLE=false
-source "/home/pgranger/kube-ps1/kube-ps1.sh"
-kubeoff # off by default
+#source "/home/pgranger/kube-ps1/kube-ps1.sh"
+source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+kubeoff "$@" # off by default
 
-export BASEPROMPT='\n\e${USER_COLOR}\u\
-`activevirtualenv`\
+# shellcheck disable=SC2016,SC1004
+BASEPROMPT='\n\e${USER_COLOR}\u\
+$(activevirtualenv)\
 $(kube_ps1) \
 \e${RED_COLOR}${AWS_DEFAULT_PROFILE} \
 \e${GRAY_COLOR}in \e${GREEN_COLOR}\w\
-\e${GRAY_COLOR}`vcprompt`\
+\e${GRAY_COLOR}$(vcprompt)\
 \e${DEFAULT_COLOR}'
-
 
 export TERM=screen-256color
 
@@ -122,10 +109,6 @@ alias ls="command ls $LS_COMMON"
 bind '"\e[A"':history-search-backward
 bind '"\e[B"':history-search-forward
 
-alias ..='cd ..'
-
-alias edit='$EDITOR $@'
-
 function cleanswp() {
   find . -name "*.swp" -exec rm -rf {} \;
 
@@ -146,6 +129,9 @@ fi
 # Use git-completion if available
 if [ -e "/usr/share/bash-completion/completions/git" ]; then
   source "/usr/share/bash-completion/completions/git"
+fi;
+if [ -e "~/.git-completion.bash" ]; then
+  source "~/.git-completion.bash"
 fi;
 
 # Use bash-completion, if available
@@ -195,16 +181,11 @@ fi
 alias k="kubectl"
 alias kx=kubectx
 alias ke="k get events --sort-by .lastTimestamp"
-alias vi=nvim.appimage
-alias vim=nvim.appimage
+#alias vi=nvim.appimage
+#alias vim=nvim.appimage
 alias sq="cd ~/w/process-deployment-operator; ~/Downloads/sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.projectKey=pdd  -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000  -Dsonar.login=3cb6f826242631230b885ab302d66b04023256eb -Dsonar.go.coverage.reportPaths=cover.out"
 alias pvpn="protonvpn-cli"
 
-function eaivpn() {
-    cd ~/Documents/forticlientsslvpn/64bit/
-    sudo ./forticlientsslvpn_cli --server eai-vpn.elmt.io:443 --vpnuser pgranger@elementai.com
-    cd -
-}
 
 export PATH="$HOME/.poetry/bin:$PATH"
 
@@ -222,6 +203,11 @@ source <(inv --print-completion-script bash)
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-. $HOME/.asdf/asdf.sh
+#. $HOME/.asdf/asdf.sh
+. /usr/local/opt/asdf/asdf.sh
 
-. $HOME/.asdf/completions/asdf.bash
+. /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
+#. $HOME/.asdf/completions/asdf.bash
+
+# Created by `userpath` on 2021-01-22 20:45:37
+export PATH="$PATH:/Users/philippe.granger/.local/bin"

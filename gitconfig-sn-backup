@@ -1,0 +1,9 @@
+[user]
+	name = philippe.granger
+	email = philippe.granger@servicenow.com
+[branch]
+	autosetuprebase = always
+[core]
+	autocrlf = input
+[credential]
+	helper = osxkeychain
