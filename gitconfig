@@ -38,9 +38,10 @@
   protocol = https
 
 [core]
+  sshCommand = "ssh -i ~/.ssh/id_ed25519"
   pager = less -R
 	editor = vim
-	excludesFile = /home/pgranger/.gitignore_global
+	excludesFile = ~/.gitignore_global
 
 [push]
   default = matching
@@ -58,8 +59,14 @@
 [cola]
 	spellcheck = false
 [credential]
-	helper = store
+	helper = osxkeychain
 [include]
     path = ~/.gitconfig.local
 [rerere]
 	enabled = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[user]
+	; email = pgranger@elementai.com
+	email = philippe.granger@servicenow.com
+	name = Philippe Granger
