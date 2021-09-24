@@ -217,6 +217,12 @@ if vim_plug_just_installed
 endif
 
 " ============================================================================
+" majutsushi/tagbar
+"#nmap <F3> :TagbarToggle<CR>
+autocmd FileType go nmap <F8> :TagbarToggle<CR>
+autocmd FileType python nmap <F8> :TagbarToggle<CR>
+
+" ============================================================================
 " vimspector
 
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -629,6 +635,10 @@ endif
 if filereadable(expand(custom_configs_path))
   execute "source " . custom_configs_path
 endif
+
+" Set yaml.gotmpl as yaml file
+au BufRead,BufNewFile *.yaml.gotmpl setfiletype yaml
+
 
 " python --------------------------------------------
 let g:python3_host_prog = '/Users/philippe.granger/.pyenv/versions/3.8.7/bin/python'
