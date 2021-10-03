@@ -1,6 +1,7 @@
 rules:
   - folders:
       - /home/pgranger/Camera Uploads
+      - /home/pgranger/Pictures/camera_upload
       - ~/Downloads/test picture
     actions:
       - python: |
