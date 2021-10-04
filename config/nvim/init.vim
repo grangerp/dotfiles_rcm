@@ -201,19 +201,11 @@ Plug 'AndrewRadev/splitjoin.vim'
 " Activity watch
 Plug 'ActivityWatch/aw-watcher-vim'
 
-
 " change case, camel, kebab, etc
 Plug 'tpope/vim-abolish'
 
 " change hyphen case to camek case
 Plug 'chiedo/vim-case-convert'
-
-" asciidoc
-Plug 'habamax/vim-asciidoctor'
-let g:asciidoctor_fenced_languages = ['python', 'go', 'yaml']
-" Plug 'dahu/vim-asciidoc'
-" Plug 'matcatc/vim-asciidoc-folding'
-
 
 " coverage
 Plug 'mgedmin/coverage-highlight.vim'
@@ -221,34 +213,19 @@ Plug 'mgedmin/coverage-highlight.vim'
 " Restructured text
 Plug 'nvie/vim-rst-tables'
 
-" note taking
-"Plug 'fmoralesc/vim-pad'
-
-Plug 'google/vim-maktaba'
-Plug 'bazelbuild/vim-bazel'
-
 " Show map when stalled and multiple options are available
 Plug 'fcpg/vim-showmap'
 
 " Alternate between files
 Plug 'tpope/vim-projectionist'
 
-" typescirpt
-Plug 'leafgarland/typescript-vim'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-" For Denite features
-Plug 'Shougo/denite.nvim'
-
-" Java autocomplete
-Plug 'artur-shaik/vim-javacomplete2'
-" Java completion
-autocmd FileType java setlocal omnifunc=javacomplete#Complete
-autocmd FileType java JCEnable
-
 " file browser
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 
+" fuzzy finder
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 " Initialize plugin system
 call plug#end()
@@ -497,4 +474,4 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:yankring_clipboard_monitor = 0
 let g:yankring_history_dir = '~/.config/nvim/'
 
-let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.8.6/bin/python'
+let g:python3_host_prog = '/home/pgranger/.pyenv/versions/3.8.7/bin/python'
