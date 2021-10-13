@@ -102,3 +102,4 @@ eval "$(starship init bash)"
 
 export GO111MODULE=on
 export GOPATH=$HOME/go
+export GH_USERNAME=grangerp
