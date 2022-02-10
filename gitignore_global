@@ -3,3 +3,6 @@ Session.vim
 .envrc
 .direnv
 tags
+.tool-versions
+.vimspector.json
+.projections.json
