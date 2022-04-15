@@ -1,17 +1,37 @@
 rules:
-  - folders:
-      - /home/pgranger/Camera Uploads
-      - /home/pgranger/Pictures/camera_upload
-      - ~/Downloads/test picture
+  - locations:
+    - path: /home/pgranger/Pictures/camera_upload
+      ignore_errors: true
+    # - path: /home/pgranger/Downloads/testst
+    #   ignore_errors: true
     actions:
       - python: |
           from pathlib import Path
-          if path.is_file:
-            path_splitted=path.name.split('-')
-            if len(path_splitted) >= 3:
-              year, month, *_ = path_splitted
-              new_path = path.parent/year/month/path.name
-              new_path.parent.mkdir(parents=True,exist_ok=True)
-              path.rename(new_path)
+          import exifread # pipx inject organize-tool exifread 
+          import re
+          def rename_by_exif():
+            f = open(path, 'rb')
+            tags = exifread.process_file(f)
+            idt = tags.get("Image DateTime")
+            if idt:
+              idts = idt.values.split(" ")
+              if len(idts) == 2:
+                idts = idts[0].split(":")
+                if len(idts) == 3:
+                  year, month, *_ = idts
+                  new_path = path.parent/year/month/path.name
+                  new_path.parent.mkdir(parents=True,exist_ok=True)
+                  path.rename(new_path)
+
+          def rename_by_regex():
+            date_re = re.compile("(\d{4})-(\d{2})-(\d{2})") # yyyy-mm-dd
+            #date_re = re.compile("(\d{4})(\d{2})(\d{2})") # yyyymmdd
+            if path.is_file:
+              res = date_re.search(path.name)
+              if res:
+                year, month, _ = res.groups()
+                new_path = path.parent/year/month/path.name
+                path.rename(new_path)
+          rename_by_regex()
 
     subfolders: false
