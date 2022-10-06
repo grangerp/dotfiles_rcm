@@ -153,6 +153,7 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 " Asynchronous Lint Engine
+"Plug 'dense-analysis/ale', {'tag': 'v3.2.0'}
 Plug 'dense-analysis/ale'
 " grepper
 Plug 'mhinz/vim-grepper'
@@ -205,6 +206,11 @@ Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 
+Plug 'earthly/earthly.vim', { 'branch': 'main' }
+
+" hurl file https://hurl.dev
+Plug 'fourjay/vim-hurl'
+
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
 
@@ -226,7 +232,7 @@ autocmd FileType python nmap <F8> :TagbarToggle<CR>
 " vimspector
 
 let g:vimspector_enable_mappings = 'HUMAN'
-let g:vimspector_install_gadgets = [ 'debugpy' ]
+let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'delve']
 
 " ============================================================================
 " Vim settings and mappings
@@ -384,14 +390,16 @@ set shiftwidth=4
 set diffopt+=vertical
 
 " Ale --------------------------------------------
-" let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier'], 'go':['goimports'],  'javascript': ['eslint']}
-" let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
-let g:ale_linters = {'markdown': ['markdownlint', 'vale']}
-" let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
-" let g:ale_fix_on_save = 1
+"let g:ale_fixers = {'python': ['black', 'isort']}
+let g:ale_fixers = {'go': []}
+"let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
+let g:ale_linters = {}
+"let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls', 'golangci-lint']}
+let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
+let g:ale_fix_on_save = 1
 " " only run linter on save
 " let g:ale_lint_on_text_changed = 'never'
-" let g:ale_open_list = 1
+let g:ale_open_list = 1
 " " used nvim current dir so it use .config files
 " let g:ale_python_pylint_change_directory = 0
 
@@ -411,13 +419,14 @@ autocmd FileType go nmap <leader>r <Plug>(go-run)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_build_constraints = 1
+" let g:go_highlight_types = 1
+" let g:go_highlight_fields = 1
+" let g:go_highlight_functions = 1
+" let g:go_highlight_function_calls = 1
+" let g:go_highlight_operators = 1
+" let g:go_highlight_extra_types = 1
+" let g:go_highlight_build_constraints = 1
+
 "let g:go_metalinter_autosave = 1
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
@@ -429,8 +438,18 @@ function! s:build_go_files()
   endif
 endfunction
 autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+" let g:go_fmt_command = "goimports -local "
+let g:go_fmt_options = {
+    \ 'gofmt': '-s',
+    \ 'goimports': '-local github.com/metriodev',
+    \ }
 let g:go_fmt_command = "goimports"
+let g:go_imports_mode = 'goimports'
+let g:go_imports_autosave = 1
+
 let g:go_rename_command = 'gopls'
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 " Tell deoplete to use omni for autocompletion
 call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
@@ -641,4 +660,4 @@ au BufRead,BufNewFile *.yaml.gotmpl setfiletype yaml
 
 
 " python --------------------------------------------
-let g:python3_host_prog = '/Users/philippe.granger/.pyenv/versions/3.8.7/bin/python'
+let g:python3_host_prog = '/Users/pgranger/.pyenv/versions/3.8.12/bin/python'
