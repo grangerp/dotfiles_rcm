@@ -73,15 +73,15 @@ font:
     # style: Retina
 
   # The bold font face
-  # bold:
-    # family: "Fira Code"
-    # family: "Source Code Pro"
+  bold:
+    family: "Fira Code"
+    #family: "Source Code Pro"
 
   # The italic font face
-  # italic:
-    # family: "Fira Code"
+  italic:
+    family: "Fira Code"
     # family: "Source Code Pro"
-    # style: "Medium Italic"
+    style: "Medium Italic"
 
   # Point size of the font
   size: 14.0
@@ -113,7 +113,7 @@ font:
   #
   # This is a global setting and will require a log out or restart to take
   # effect.
-  use_thin_strokes: true
+  # use_thin_strokes: true
 
 # When true, bold text is drawn using the bright variant of colors.
 draw_bold_text_with_bright_colors: false
@@ -124,6 +124,9 @@ draw_bold_text_with_bright_colors: false
 
 # Colors
 colors:
+  footer_bar:
+    background: '#434c5e'
+    foreground: '#d8dee9'
   primary:
     background: '#2e3440'
     foreground: '#d8dee9'
@@ -141,9 +144,9 @@ colors:
     matches:
       foreground: CellBackground
       background: '#88c0d0'
-    bar:
-      background: '#434c5e'
-      foreground: '#d8dee9'
+    # bar:
+    #   background: '#434c5e'
+    #   foreground: '#d8dee9'
   normal:
     black: '#3b4252'
     red: '#bf616a'

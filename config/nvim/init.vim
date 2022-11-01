@@ -167,7 +167,7 @@ Plug 'tpope/vim-obsession'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'AndrewRadev/splitjoin.vim'
 " Activity watch
-Plug 'ActivityWatch/aw-watcher-vim'
+" Plug 'ActivityWatch/aw-watcher-vim'
 " change case, camel, kebab, etc
 Plug 'tpope/vim-abolish'
 " change hyphen case to camek case
@@ -660,4 +660,4 @@ au BufRead,BufNewFile *.yaml.gotmpl setfiletype yaml
 
 
 " python --------------------------------------------
-let g:python3_host_prog = '/Users/pgranger/.pyenv/versions/3.8.12/bin/python'
+let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.8.12/bin/python'

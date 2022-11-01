@@ -115,5 +115,5 @@ if [ -f '/Users/pgranger/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/pgrang
 if [ -f '/Users/pgranger/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/pgranger/google-cloud-sdk/completion.zsh.inc'; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
