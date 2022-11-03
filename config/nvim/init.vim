@@ -211,6 +211,8 @@ Plug 'earthly/earthly.vim', { 'branch': 'main' }
 " hurl file https://hurl.dev
 Plug 'fourjay/vim-hurl'
 
+Plug 'nvim-treesitter/nvim-treesitter'
+
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
 

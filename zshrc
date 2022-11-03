@@ -105,6 +105,7 @@ source $ZSH/oh-my-zsh.sh
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519
 alias vim=nvim
 alias vi=nvim
+alias tldrf='tldr --list|fzf --preview "tldr {1} --color=always" --preview-window=right,70%|xargs tldr'
 eval "$(starship init zsh)"
 
 
