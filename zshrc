@@ -109,12 +109,12 @@ alias tldrf='tldr --list|fzf --preview "tldr {1} --color=always" --preview-windo
 eval "$(starship init zsh)"
 
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/pgranger/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/pgranger/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/pgranger/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/pgranger/google-cloud-sdk/completion.zsh.inc'; fi
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # export PATH="$HOME/.rbenv/bin:$PATH"
 # eval "$(rbenv init -)"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/phigra/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/phigra/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/phigra/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/phigra/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
