@@ -1,0 +1,14 @@
+ServerAliveInterval 60
+ServerAliveCountMax 5
+
+### Production
+Host production
+  Hostname 51.79.18.27
+  User app
+  ProxyJump devops
+
+## France
+Host france
+  Hostname 51.91.30.35
+  User app
+  ProxyJump devops
