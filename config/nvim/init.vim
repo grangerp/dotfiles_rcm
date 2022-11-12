@@ -165,8 +165,6 @@ Plug 'tpope/vim-obsession'
 " golang
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'AndrewRadev/splitjoin.vim'
-" Activity watch
-Plug 'ActivityWatch/aw-watcher-vim'
 " change case, camel, kebab, etc
 Plug 'tpope/vim-abolish'
 " change hyphen case to camek case
