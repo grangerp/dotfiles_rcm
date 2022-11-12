@@ -153,7 +153,7 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 " Asynchronous Lint Engine
-Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale', {'version': 'v3.2.0'}
 " grepper
 Plug 'mhinz/vim-grepper'
 " class outline viewer
@@ -388,7 +388,7 @@ set shiftwidth=4
 set diffopt+=vertical
 
 " Ale --------------------------------------------
-" let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier'], 'go':['goimports'],  'javascript': ['eslint']}
+let g:ale_fixers = {'python': ['black', 'isort'], 'typescript': ['prettier'], 'go':['goimports'],  'javascript': ['eslint']}
 " let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
 let g:ale_linters = {'markdown': ['markdownlint', 'vale']}
 " let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'

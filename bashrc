@@ -14,6 +14,7 @@ export PYOPEN_CMD=subl
 export GIT_EDITOR=$EDITOR
 export LIBTOOLIZE=glibtoolize
 export PATH=/home/pgranger/go/bin:/usr/local/bin:/usr/local/sbin:/home/pgranger/.local/bin:/home/pgranger/bin:$PATH
+export PATH=$PATH:/usr/local/go/bin
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
@@ -103,3 +104,6 @@ eval "$(starship init bash)"
 export GO111MODULE=on
 export GOPATH=$HOME/go
 export GH_USERNAME=grangerp
+
+# Created by `pipx` on 2022-05-22 12:14:59
+export PATH="$PATH:/home/pgranger/.local/bin"

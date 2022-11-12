@@ -65,3 +65,5 @@
 	enabled = true
 [init]
 	defaultBranch = main
+[user]
+	signingkey = 01DB05658DFFDC9F
