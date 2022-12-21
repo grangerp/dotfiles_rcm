@@ -118,3 +118,5 @@ if [ -f '/Users/phigra/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/User
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/phigra/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/phigra/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+export GOPRIVATE=github.com/metriodev/schema-registry

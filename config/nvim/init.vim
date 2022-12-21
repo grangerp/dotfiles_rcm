@@ -224,6 +224,9 @@ if vim_plug_just_installed
     :PlugInstall
 endif
 
+" vim-commentary comment format for hurl files
+autocmd FileType hurl setlocal commentstring=#\ %s
+
 " ============================================================================
 " majutsushi/tagbar
 "#nmap <F3> :TagbarToggle<CR>
@@ -395,8 +398,9 @@ set diffopt+=vertical
 "let g:ale_fixers = {'python': ['black', 'isort']}
 let g:ale_fixers = {'go': []}
 "let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
-let g:ale_linters = {}
-let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls', 'golangci-lint']}
+"let g:ale_linters = {}
+"let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls', 'golangci-lint']}
+let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
 let g:ale_fix_on_save = 1
 " " only run linter on save
