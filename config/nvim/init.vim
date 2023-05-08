@@ -199,6 +199,8 @@ Plug 'will133/vim-dirdiff'
 Plug 'puremourning/vimspector'
 Plug 'alfredodeza/pytest.vim'
 
+" Plug 'sagi-z/vimspectorpy', { 'do': { -> vimspectorpy#update() } }
+
 Plug 'aklt/plantuml-syntax'
 
 Plug 'nvim-lua/plenary.nvim'
@@ -212,6 +214,9 @@ Plug 'earthly/earthly.vim', { 'branch': 'main' }
 Plug 'fourjay/vim-hurl'
 
 Plug 'nvim-treesitter/nvim-treesitter'
+
+Plug 'sebdah/vim-delve'
+let g:delve_new_command = 'new'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -395,12 +400,9 @@ set shiftwidth=4
 set diffopt+=vertical
 
 " Ale --------------------------------------------
-"let g:ale_fixers = {'python': ['black', 'isort']}
-let g:ale_fixers = {'go': []}
+let g:ale_fixers = {'python': ['black', 'isort']}
 "let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
-"let g:ale_linters = {}
-"let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls', 'golangci-lint']}
-let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls']}
+let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'],'python':['mypy', 'flake8']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
 let g:ale_fix_on_save = 1
 " " only run linter on save
@@ -415,7 +417,7 @@ let g:vim_markdown_folding_disabled = 1
 
 " grepper ---------------------------------------
 let g:grepper = {}
-let g:grepper.tools = ['grep', 'git', 'rg']
+let g:grepper.tools = ['grep', 'git', 'rg', 'ag']
 
 " golang vim-go ---------------------------------
 "noremap <C-y> :cnext<CR>
@@ -629,6 +631,10 @@ let g:airline_powerline_fonts = 0
 let g:airline_theme = 'bubblegum'
 let g:airline#extensions#whitespace#enabled = 0
 
+" close all buffers except current one
+command! BufCurOnly execute '%bdelete|edit#|bdelete#'
+
+
 " Fancy Symbols!!
 
 if fancy_symbols_enabled
@@ -666,4 +672,4 @@ au BufRead,BufNewFile *.yaml.gotmpl setfiletype yaml
 
 
 " python --------------------------------------------
-let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.8.12/bin/python'
+let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.9.16/bin/python'

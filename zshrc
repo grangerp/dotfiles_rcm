@@ -73,7 +73,8 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to $ZSH_CUSTOM/lugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pyenv asdf gcloud direnv docker-compose chucknorris)
+# plugins=(git pyenv asdf gcloud direnv docker-compose chucknorris)
+plugins=(git pyenv direnv docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -113,10 +114,48 @@ eval "$(starship init zsh)"
 # export PATH="$HOME/.rbenv/bin:$PATH"
 # eval "$(rbenv init -)"
 
+export GOPRIVATE=github.com/metriodev/schema-registry
+
+# Find wifi network SSID
+current_ssid=$(/Sy*/L*/Priv*/Apple8*/V*/C*/R*/airport -I | awk '/ SSID:/ {print $2}')
+office_ssid="CWLN"
+
+corpo() {
+    # proxy for brew
+    echo "Set corpo vars"
+    export http_proxy="http://127.0.0.1:9000"
+    export https_proxy="http://127.0.0.1:9000"
+    export SSL_CERT_FILE=~/ZscalerRootCertificate-2048-SHA256.crt 
+    export REQUESTS_CA_BUNDLE=~/ZscalerRootCertificate-2048-SHA256.crt
+    export CORPO_NET=true
+}
+uncorpo() {
+    # proxy for brew
+    echo "uncorpo vars"
+    unset http_proxy
+    unset https_proxy
+    unset SSL_CERT_FILE
+    unset REQUESTS_CA_BUNDLE
+    unset CORPO_NET
+}
+
+if [[ "$current_ssid" = "$office_ssid" ]]; then
+    corpo
+else
+    uncorpo
+fi
+
+# CR ds aliases
+alias ds-cr='gcloud run services describe --region  us-central1 datasources-datasources'
+#gcloud logging read "resource.labels.service_name=datasources-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1" --limit 10 --order desc
+# ❯ gcloud beta logging tail "resource.labels.service_name=datasources-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1"
+alias ds-logs='gcloud beta logging tail "resource.labels.service_name=datasources-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1" --format="default(timestamp,resource["labels"]["instance_id"],json_payload,http_request)"'
+
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/phigra/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/phigra/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/phigra/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/phigra/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/phigra/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/phigra/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/phigra/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/phigra/google-cloud-sdk/completion.zsh.inc'; fi
 
-export GOPRIVATE=github.com/metriodev/schema-registry
+# Created by `pipx` on 2023-04-14 19:33:55
+export PATH="$PATH:/Users/phigra/.local/bin"
