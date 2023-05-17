@@ -128,6 +128,7 @@ corpo() {
     export SSL_CERT_FILE=~/ZscalerRootCertificate-2048-SHA256.crt 
     export REQUESTS_CA_BUNDLE=~/ZscalerRootCertificate-2048-SHA256.crt
     export CORPO_NET=true
+    export ZSCALER_CERT=$(cat ~/ZscalerRootCertificate-2048-SHA256.crt)
 }
 uncorpo() {
     # proxy for brew
@@ -137,6 +138,7 @@ uncorpo() {
     unset SSL_CERT_FILE
     unset REQUESTS_CA_BUNDLE
     unset CORPO_NET
+    unset ZSCALER_CERT
 }
 
 if [[ "$current_ssid" = "$office_ssid" ]]; then
