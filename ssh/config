@@ -1,3 +1,5 @@
+Include ~/.orbstack/ssh/config
+
 ServerAliveInterval 60
 ServerAliveCountMax 5
 
