@@ -69,7 +69,6 @@ Plug 'tpope/vim-commentary'
 " Better file browser
 Plug 'preservim/nerdtree'
 " Class/module browser
-Plug 'majutsushi/tagbar'
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " A couple of nice colorschemes
