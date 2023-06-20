@@ -60,14 +60,20 @@
 	spellcheck = false
 [credential]
 	helper = osxkeychain
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
 [include]
     path = ~/.gitconfig.local
 [rerere]
 	enabled = true
-[url "git@github.com:"]
-	insteadOf = https://github.com/
+; [url "git@github.com:"]
+; 	insteadOf = https://github.com/
 [user]
     name = Philippe Granger
     email = pgranger@metrio.net
 [gpg]
 	format = ssh
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[credential "ghe.contoso.com"]
+	provider = github
