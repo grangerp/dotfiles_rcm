@@ -73,7 +73,7 @@
     email = pgranger@metrio.net
 [gpg]
 	format = ssh
-[credential "https://dev.azure.com"]
-	useHttpPath = true
 [credential "ghe.contoso.com"]
 	provider = github
+[credential "https://dev.azure.com"]
+	useHttpPath = true
