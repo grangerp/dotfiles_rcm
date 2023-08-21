@@ -128,7 +128,7 @@ corpo() {
     #export SSL_CERT_FILE=~/ZscalerRootCertificate-2048-SHA256.crt 
     #export REQUESTS_CA_BUNDLE=~/ZscalerRootCertificate-2048-SHA256.crt
     export CORPO_NET=true
-    export ZSCALER_CERT=$(cat ~/ZscalerRootCertificate-2048-SHA256.crt)
+    #export ZSCALER_CERT=$(cat ~/ZscalerRootCertificate-2048-SHA256.crt)
 }
 uncorpo() {
     # proxy for brew
