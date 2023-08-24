@@ -6,3 +6,6 @@ source ~/.zshrc
 
 # Created by `pipx` on 2023-04-14 19:33:55
 export PATH="$PATH:/Users/phigra/.local/bin"
+
+# Added by OrbStack: command-line tools and integration
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
