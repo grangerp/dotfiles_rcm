@@ -244,6 +244,20 @@ let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'delve']
 
 " ============================================================================
+" vim-signify
+autocmd User SignifyHunk call s:show_current_hunk()
+
+function! s:show_current_hunk() abort
+  let h = sy#util#get_hunk_stats()
+  if !empty(h)
+    echo printf('[Hunk %d/%d]', h.current_hunk, h.total_hunks)
+  endif
+endfunction
+
+nmap gj <plug>(signify-next-hunk)
+nmap gk <plug>(signify-prev-hunk)
+
+" ============================================================================
 " Vim settings and mappings
 " You can edit them as you wish
 
@@ -594,7 +608,7 @@ let g:choosewin_overlay_enable = 1
 
 " this first setting decides in which order try to guess your current vcs
 " UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = ['git', 'hg']
+let g:signify_vcs_list = ['git']
 " mappings to jump to changed blocks
 nmap <leader>sn <plug>(signify-next-hunk)
 nmap <leader>sp <plug>(signify-prev-hunk)
@@ -671,4 +685,6 @@ au BufRead,BufNewFile *.yaml.gotmpl setfiletype yaml
 
 
 " python --------------------------------------------
-let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.9.16/bin/python'
+" let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.9.16/bin/python'
+let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.11.3/bin/python'
+
