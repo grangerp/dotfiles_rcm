@@ -217,6 +217,9 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'sebdah/vim-delve'
 let g:delve_new_command = 'new'
 
+" " github copilot
+" Plug 'github/copilot.vim'
+
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
 

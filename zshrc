@@ -114,7 +114,7 @@ eval "$(starship init zsh)"
 # export PATH="$HOME/.rbenv/bin:$PATH"
 # eval "$(rbenv init -)"
 
-export GOPRIVATE=github.com/metriodev/schema-registry
+export GOPRIVATE=github.com/metriodev/*
 
 # Find wifi network SSID
 current_ssid=$(/Sy*/L*/Priv*/Apple8*/V*/C*/R*/airport -I | awk '/ SSID:/ {print $2}')
@@ -125,33 +125,40 @@ corpo() {
     echo "Set corpo vars"
     export http_proxy="http://127.0.0.1:9000"
     export https_proxy="http://127.0.0.1:9000"
-    #export SSL_CERT_FILE=~/ZscalerRootCertificate-2048-SHA256.crt 
-    #export REQUESTS_CA_BUNDLE=~/ZscalerRootCertificate-2048-SHA256.crt
+    # export HTTP_PROXY="http://127.0.0.1:9000"
+    # export HTTPS_PROXY="http://127.0.0.1:9000"
+    export SSL_CERT_FILE=~/ZscalerRootCertificate-2048-SHA256.crt 
+    export REQUESTS_CA_BUNDLE=~/ZscalerRootCertificate-2048-SHA256.crt
     export CORPO_NET=true
-    #export ZSCALER_CERT=$(cat ~/ZscalerRootCertificate-2048-SHA256.crt)
+    # export ZSCALER_CERT=$(cat ~/ZscalerRootCertificate-2048-SHA256.crt)
 }
 uncorpo() {
     # proxy for brew
     echo "uncorpo vars"
     unset http_proxy
     unset https_proxy
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
     unset SSL_CERT_FILE
     unset REQUESTS_CA_BUNDLE
     unset CORPO_NET
     unset ZSCALER_CERT
 }
 
-if [[ "$current_ssid" = "$office_ssid" ]]; then
-    corpo
-else
-    uncorpo
-fi
+corpo
+
+# if [[ "$current_ssid" = "$office_ssid" ]]; then
+#     corpo
+# else
+#     uncorpo
+# fi
 
 # CR ds aliases
 alias ds-cr='gcloud run services describe --region  us-central1 datasources-datasources'
 #gcloud logging read "resource.labels.service_name=datasources-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1" --limit 10 --order desc
 # ❯ gcloud beta logging tail "resource.labels.service_name=datasources-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1"
 alias ds-logs='gcloud beta logging tail "resource.labels.service_name=datasources-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1" --format="default(timestamp,resource["labels"]["instance_id"],json_payload,http_request)"'
+alias f6-logs='gcloud beta logging tail "resource.labels.service_name=frontend6-datasources AND resource.type=cloud_run_revision AND resource.labels.location=us-central1"'
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/phigra/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/phigra/google-cloud-sdk/path.zsh.inc'; fi
@@ -161,3 +168,17 @@ if [ -f '/Users/phigra/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ph
 
 # Created by `pipx` on 2023-04-14 19:33:55
 export PATH="$PATH:/Users/phigra/.local/bin"
+
+eval "$(atuin init zsh --disable-up-arrow)"
+
+dependabotapprove() {
+    for pr in $(gh pr list --author=app/dependabot --json number,author --jq '.[].number'); do gh pr review --approve $pr ; done
+}
+dependabotautomerge() {
+    for pr in $(gh pr list --author=app/dependabot --json number,author --jq '.[].number'); do gh pr merge --merge --auto --delete-branch $pr ; done
+}
+dependabotrebase() {
+    for pr in $(gh pr list --author=app/dependabot --json number,author --jq '.[].number'); do gh pr comment -b "@dependabot rebase" $pr ; done
+}
+
+alias nvim-kickstart='NVIM_APPNAME="nvim-kickstart" nvim'

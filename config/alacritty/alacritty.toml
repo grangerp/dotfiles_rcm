@@ -71,7 +71,7 @@ unfocused_hollow = true
 log_level = "OFF"
 persistent_logging = false
 print_events = false
-ref_test = false
+#ref_test = false
 render_timer = false
 
 [env]
@@ -604,18 +604,18 @@ mods = "Super"
 [mouse]
 hide_when_typing = true
 
-[mouse.double_click]
-threshold = 300
+# [mouse.double_click]
+# threshold = 300
 
-[mouse.triple_click]
-threshold = 300
+# [mouse.triple_click]
+# threshold = 300
 
 [scrolling]
 history = 0
 multiplier = 3
 
 [selection]
-save_to_clipbiard = true
+#save_to_clipbiard = true
 
 [window]
 decorations = "none"
