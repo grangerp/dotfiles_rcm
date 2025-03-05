@@ -1,17 +1,28 @@
 " Fisa-vim-config, a config for both Vim and NeoVim
 " http://vim.fisadev.com
-" version: 12.0.1
+" version: 12.2.1
 
 " To use fancy symbols wherever possible, change this setting from 0 to 1
-" and use a font from https://github.com/ryanoasis/nerd-fonts in your terminal
-" (if you aren't using one of those fonts, you will see funny characters here.
-" Turst me, they look nice when using one of those fonts).
+" and use a font from https://github.com/ryanoasis/nerd-fonts in your terminal 
+" (if you aren't using one of those fonts, you will see funny characters here. 
+" Trust me, they look nice when using one of those fonts).
 let fancy_symbols_enabled = 0
 
+" To use the background color of your terminal app, change this setting from 0
+" to 1
+let transparent_background = 0
 
 set encoding=utf-8
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
+
+" Figure out the system Python for Neovim.
+" if exists("$VIRTUAL_ENV")
+"     let g:python3_host_prog=substitute(system("which -a python3 | head -n2 | tail -n1"), "\n", '', 'g')
+" else
+"     let g:python3_host_prog=substitute(system("which python3"), "\n", '', 'g')
+" endif
+
 
 " ============================================================================
 " Vim-plug initialization
@@ -63,17 +74,11 @@ endif
 " Override configs by directory
 Plug 'arielrossanigo/dir-configs-override.vim'
 " Code commenter
-Plug 'scrooloose/nerdcommenter'
-" Code commenter
 Plug 'tpope/vim-commentary'
-" Better file browser
-Plug 'preservim/nerdtree'
-" Class/module browser
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " A couple of nice colorschemes
 Plug 'fisadev/fisa-vim-colorscheme'
-Plug 'patstockwell/vim-monokai-tasty'
 " Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -88,17 +93,10 @@ if using_neovim && vim_plug_just_installed
 else
     Plug 'Shougo/deoplete.nvim'
 endif
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-" Python autocompletion
-Plug 'deoplete-plugins/deoplete-jedi'
 " Completion from other opened files
 Plug 'Shougo/context_filetype.vim'
-" Just to add the python go-to-definition and similar features, autocompletion
-" from this plugin is disabled
-Plug 'davidhalter/jedi-vim'
 " Automatically close parenthesis, etc
-Plug 'Townk/vim-autoclose'
+"Plug 'Townk/vim-autoclose'
 " Surround
 Plug 'tpope/vim-surround'
 " Indent text object
@@ -111,48 +109,41 @@ Plug 'sheerun/vim-polyglot'
 Plug 'mileszs/ack.vim'
 " Paint css colors with the real color
 Plug 'lilydjwg/colorizer'
-" Window chooser
-Plug 't9md/vim-choosewin'
-" Automatically sort python imports
-Plug 'fisadev/vim-isort'
-" Highlight matching html tags
-Plug 'valloric/MatchTagAlways'
-" Generate html in a simple way
-Plug 'mattn/emmet-vim'
 " Git integration
 Plug 'tpope/vim-fugitive'
 " Git/mercurial/others diff icons on the side of the file lines
 Plug 'mhinz/vim-signify'
 " Yank history navigation
 Plug 'vim-scripts/YankRing.vim'
-" Linters
-" Plug 'neomake/neomake'
 " Relative numbering of lines (0 is the current line)
 " (disabled by default because is very intrusive and can't be easily toggled
 " on/off. When the plugin is present, will always activate the relative
 " numbering every time you go to normal mode. Author refuses to add a setting
 " to avoid that)
 Plug 'myusuf3/numbers.vim'
-" Nice icons in the file explorer and file type status line.
-Plug 'ryanoasis/vim-devicons'
 " enable Gbrowse
 Plug 'tpope/vim-rhubarb'
 " md preview
 Plug 'shime/vim-livedown'
 " md preview
-Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
+" Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
+" md preview
+"Plug 'MeanderingProgrammer/render-markdown.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'echasnovski/mini.icons'
+Plug 'echasnovski/mini.nvim'
+
 " snipets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " Pluse search match
-Plug 'inside/vim-search-pulse'
+"Plug 'inside/vim-search-pulse'
 " highlight on yank
 Plug 'machakann/vim-highlightedyank'
 " Markdown (:TableFormat)
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 " Asynchronous Lint Engine
-"Plug 'dense-analysis/ale', {'tag': 'v3.2.0'}
 Plug 'dense-analysis/ale'
 " grepper
 Plug 'mhinz/vim-grepper'
@@ -165,63 +156,66 @@ Plug 'tpope/vim-obsession'
 " golang
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'AndrewRadev/splitjoin.vim'
-" Activity watch
-" Plug 'ActivityWatch/aw-watcher-vim'
 " change case, camel, kebab, etc
 Plug 'tpope/vim-abolish'
 " change hyphen case to camek case
 Plug 'chiedo/vim-case-convert'
 " Alternate between files
 Plug 'tpope/vim-projectionist'
-" typescirpt
-" Plug 'leafgarland/typescript-vim'
-" Plug 'HerringtonDarkholme/yats.vim'
-" Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 " Show the content of the register on " or @ or <CTRL-R> in insert mode
 Plug 'junegunn/vim-peekaboo'
 
-if using_vim
-    " Consoles as buffers (neovim has its own consoles as buffers)
-    Plug 'rosenfeld/conque-term'
-    " XML/HTML tags navigation (neovim has its own)
-    Plug 'vim-scripts/matchit.zip'
-endif
-
-" Code searcher. If you enable it, you should also configure g:hound_base_url
-" and g:hound_port, pointing to your hound instance
-" Plug 'mattn/webapi-vim'
-" Plug 'jfo/hound.vim'
+" Database
+Plug 'tpope/vim-dadbod'
+" Plug 'kristijanhusak/vim-dadbod-completion'
+Plug 'kristijanhusak/vim-dadbod-ui'
 
 " diff 2 dir: DirDiff <dir1> <dir2>
 Plug 'will133/vim-dirdiff'
 
-Plug 'puremourning/vimspector'
-Plug 'alfredodeza/pytest.vim'
+" Plug 'puremourning/vimspector'
 
-" Plug 'sagi-z/vimspectorpy', { 'do': { -> vimspectorpy#update() } }
-
+" Plantuml
 Plug 'aklt/plantuml-syntax'
 
+" Neotest
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'nvim-neotest/neotest'
+Plug 'nvim-neotest/neotest-go'
 
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-
-Plug 'earthly/earthly.vim', { 'branch': 'main' }
+" run vim in the browser
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 
 " hurl file https://hurl.dev
 Plug 'fourjay/vim-hurl'
 
-Plug 'nvim-treesitter/nvim-treesitter'
-
-Plug 'sebdah/vim-delve'
-let g:delve_new_command = 'new'
 
 " " github copilot
-" Plug 'github/copilot.vim'
+Plug 'github/copilot.vim'
+
+" directory editor
+Plug 'stevearc/oil.nvim'
+" required for oil
+Plug 'nvim-tree/nvim-web-devicons'
+
+" yaml folds za zR
+Plug 'pedrohdz/vim-yaml-folds'
+
+
+Plug 'lewis6991/gitsigns.nvim'
+
+Plug 'bruxisma/gitmoji.vim'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
+
+"lua require('render-markdown').setup({ log_level = 'debug' })
+lua require('oil').setup()
+lua require('gitsigns').setup()
+
 
 " ============================================================================
 " Install plugins the first time vim runs
@@ -230,6 +224,9 @@ if vim_plug_just_installed
 	echo "Installing Bundles, please ignore key map error messages"
     :PlugInstall
 endif
+
+
+set foldlevelstart=20
 
 " vim-commentary comment format for hurl files
 autocmd FileType hurl setlocal commentstring=#\ %s
@@ -240,11 +237,6 @@ autocmd FileType hurl setlocal commentstring=#\ %s
 autocmd FileType go nmap <F8> :TagbarToggle<CR>
 autocmd FileType python nmap <F8> :TagbarToggle<CR>
 
-" ============================================================================
-" vimspector
-
-let g:vimspector_enable_mappings = 'HUMAN'
-let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'delve']
 
 " ============================================================================
 " vim-signify
@@ -327,10 +319,23 @@ if has('gui_running') || using_neovim || (&term =~? 'mlterm\|xterm\|xterm-256\|s
         let &t_Co = 256
     endif
     " colorscheme vim-monokai-tasty
-    colorscheme fisa
+    " colorscheme fisa
+    " colorscheme duskfox
+    " colorscheme habamax
+    " colorscheme nightfox
+    colorscheme nordfox
+    " colorscheme terafox
+    " colorscheme vim
 else
     colorscheme delek
 endif
+
+if transparent_background
+    highlight Normal guibg=none
+    highlight Normal ctermbg=none
+    highlight NonText ctermbg=none
+endif
+
 
 " needed so deoplete can auto select the first suggestion
 set completeopt+=noinsert
@@ -354,7 +359,7 @@ map <M-Left> :tabp<CR>
 imap <M-Left> <ESC>:tabp<CR>
 
 " when scrolling, keep cursor 3 lines away from screen border
-set scrolloff=3
+set scrolloff=10
 
 " clear search results
 nnoremap <silent> // :noh<CR>
@@ -402,12 +407,6 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Highlight 80th column
 set colorcolumn=100
 
-" tabs and spaces handling
-set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-
 " ============================================================================
 " Plugins settings and mappings
 " Edit them as you wish.
@@ -415,8 +414,11 @@ set shiftwidth=4
 " git, fugitive ----------------------------------
 set diffopt+=vertical
 
+" Gitmoji
+let g:gitmoji_insert_emoji = v:true
+
 " Ale --------------------------------------------
-let g:ale_fixers = {'python': ['black', 'isort']}
+" let g:ale_fixers = {'python': ['black', 'isort']}
 "let g:ale_linters = {'python':['mypy', 'flake8'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'], 'javascript': ['eslint'], 'typescript': ['tsserver', 'tslint'], 'markdown': ['markdownlint', 'vale'], 'java': ['javac']}
 let g:ale_linters = {'markdown': ['markdownlint', 'vale'], 'go': ['govet', 'gobuild', 'gotype', 'gopls'],'python':['mypy', 'flake8']}
 let g:ale_echo_msg_format = '[%linter%](%code%) %s [%severity%]'
@@ -433,7 +435,7 @@ let g:vim_markdown_folding_disabled = 1
 
 " grepper ---------------------------------------
 let g:grepper = {}
-let g:grepper.tools = ['grep', 'git', 'rg', 'ag']
+let g:grepper.tools = ['grep', 'git', 'rg --hidden', 'ag --hidden']
 
 " golang vim-go ---------------------------------
 "noremap <C-y> :cnext<CR>
@@ -465,7 +467,7 @@ autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 " let g:go_fmt_command = "goimports -local "
 let g:go_fmt_options = {
     \ 'gofmt': '-s',
-    \ 'goimports': '-local github.com/metriodev',
+    \ 'goimports': '-local github.com/metriodev/datasources',
     \ }
 let g:go_fmt_command = "goimports"
 let g:go_imports_mode = 'goimports'
@@ -485,57 +487,10 @@ map <F8> :TagbarToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 
-" NERDTree -----------------------------
-
-" toggle nerdtree display
-map <F3> :NERDTreeToggle<CR>
-" open nerdtree with the current file selected
-nmap ,t :NERDTreeFind<CR>
-" don;t show these file types
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
-
-" Enable folder icons
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:DevIconsEnableFoldersOpenClose = 1
-
-" Fix directory colors
-highlight! link NERDTreeFlags NERDTreeDir
-
-" Remove expandable arrow
-let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
-let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
-let NERDTreeDirArrowExpandable = "\u00a0"
-let NERDTreeDirArrowCollapsible = "\u00a0"
-let NERDTreeNodeDelimiter = "\x07"
-
-" Autorefresh on tree focus
-function! NERDTreeRefresh()
-    if &filetype == "nerdtree"
-        silent exe substitute(mapcheck("R"), "<CR>", "", "")
-    endif
-endfunction
-
-autocmd BufEnter * call NERDTreeRefresh()
-
 " Tasklist ------------------------------
 
 " show pending tasks list
 map <F2> :TaskList<CR>
-
-" Neomake ------------------------------
-
-" Run linter on write
-" autocmd! BufWritePost * Neomake
-
-" " Check code as python3 by default
-" let g:neomake_python_python_maker = neomake#makers#ft#python#python()
-" let g:neomake_python_flake8_maker = neomake#makers#ft#python#flake8()
-" let g:neomake_python_python_maker.exe = 'python3 -m py_compile'
-" let g:neomake_python_flake8_maker.exe = 'python3 -m flake8'
-
-" " Disable error messages inside the buffer, next to the problematic line
-" let g:neomake_virtualtext_current_error = 0
-" let g:neomake_open_list = 2
 
 " Fzf ------------------------------
 
@@ -584,18 +539,7 @@ let g:context_filetype#same_filetypes._ = '_'
 " Disable autocompletion (using deoplete instead)
 let g:jedi#completions_enabled = 0
 
-" All these mappings work only for python code:
-" Go to definition
-let g:jedi#goto_command = ',d'
-" Find ocurrences
-let g:jedi#usages_command = ',o'
-" Find assignments
-let g:jedi#goto_assignments_command = ',a'
-" Go to definition in new tab
-nmap ,D :tab split<CR>:call jedi#goto()<CR>
-
 " Ack.vim ------------------------------
-
 " mappings
 nmap ,r :Ack
 nmap ,wr :execute ":Ack " . expand('<cword>')<CR>
@@ -690,4 +634,3 @@ au BufRead,BufNewFile *.yaml.gotmpl setfiletype yaml
 " python --------------------------------------------
 " let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.9.16/bin/python'
 let g:python3_host_prog = '/Users/phigra/.pyenv/versions/3.11.3/bin/python'
-
