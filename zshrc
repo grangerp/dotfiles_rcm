@@ -3,6 +3,8 @@
 
 export PATH=$HOME/bin:$HOME/go/bin:$PATH
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # to speedup ohmyzsh start time
 DISABLE_MAGIC_FUNCTIONS="true"
 DISABLE_AUTO_UPDATE="true"
@@ -136,3 +138,4 @@ alias nvim-kickstart='NVIM_APPNAME="nvim-kickstart" nvim'
 # zprof
 
 . "$HOME/.atuin/bin/env"
+. "$HOME/.cargo/env"

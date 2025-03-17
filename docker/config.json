@@ -12,5 +12,16 @@
 		"us-docker.pkg.dev": "gcloud",
 		"us.gcr.io": "gcloud"
 	},
-	"currentContext": "desktop-linux"
+	"currentContext": "desktop-linux",
+	"plugins": {
+		"debug": {
+			"hooks": "exec"
+		},
+		"scout": {
+			"hooks": "pull,buildx build"
+		}
+	},
+	"features": {
+		"hooks": "true"
+	}
 }
