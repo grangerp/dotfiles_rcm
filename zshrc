@@ -30,7 +30,7 @@ CASE_SENSITIVE="true"
 # Uncomment the following line to change how often to auto-update (in days).
 zstyle ':omz:update' frequency 13
 
-plugins=(git direnv)
+plugins=(git direnv kubectl kubectx)
 
 source $ZSH/oh-my-zsh.sh
 eval "$(starship init zsh)"
@@ -40,10 +40,26 @@ alias vim=nvim
 alias vi=nvim
 alias tldrf='tldr --list|fzf --preview "tldr {1} --color=always" --preview-window=right,70%|xargs tldr'
 
+alias kx=kubectx
+alias kns=kubectx
+
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export GOPRIVATE=github.com/metriodev/*
+# to fix sqlc after upgrading mac os
+# fix the error:
+# # github.com/pganalyze/pg_query_go/v5/parser
+# src_port_snprintf.c:374:1: error: static declaration of 'strchrnul' follows non-static declaration
+# /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_string.h:198:9: note: previous declaration is here
+# src_port_snprintf.c:438:27: warning: 'strchrnul' is only available on macOS 15.4 or newer [-Wunguarded-availability-new]
+# /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_string.h:198:9: note: 'strchrnul' has been marked as being introduced in macOS 15.4 here, but the deployment target is macOS 15.0.0
+# src_port_snprintf.c:438:27: note: enclose 'strchrnul' in a __builtin_available check to silence this warning
+# db/generate.go:3: running "go": exit status 1
+# make: *** [gen-sqlc] Error 1
+export CGO_CFLAGS="-DHAVE_STRCHRNUL"
+
+export NVIM_APPNAME=newnvim
 
 corpo() {
     # proxy for brew

@@ -81,14 +81,54 @@ If you experience any errors while trying to install kickstart, run `:checkhealt
 I hope you enjoy your Neovim journey,
 - TJ
 
+
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+--
+-- remap key for colemak dh
+-- local modes = {}
+-- https://www.reddit.com/r/neovim/comments/yuh74q/comment/iwam3ck/
+local modes = { 'n', 'x', 'o' }
+for _, mode in ipairs(modes) do
+  vim.keymap.set(mode, 'm', 'h')
+  vim.keymap.set(mode, 'M', 'H')
+
+  vim.keymap.set(mode, 'h', 'i')
+  vim.keymap.set(mode, 'H', 'I')
+
+  -- down
+  vim.keymap.set(mode, 'n', 'j')
+  vim.keymap.set(mode, 'N', 'J')
+
+  vim.keymap.set(mode, 'k', 'n')
+  vim.keymap.set(mode, 'K', 'N')
+
+  -- up
+  vim.keymap.set(mode, 'e', 'k')
+  vim.keymap.set(mode, 'E', 'K')
+
+  vim.keymap.set(mode, 'l', 'e')
+  vim.keymap.set(mode, 'L', 'E')
+
+  -- right
+  vim.keymap.set(mode, 'i', 'l')
+  vim.keymap.set(mode, 'I', 'L')
+
+  vim.keymap.set(mode, 'j', ';')
+  vim.keymap.set(mode, 'J', ':')
+
+  vim.keymap.set(mode, ';', 'm')
+  vim.keymap.set(mode, ':', 'M')
+end
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ','
 vim.g.maplocalleader = ','
+
+-- unfold by default
+vim.opt.foldlevelstart = 99
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -107,8 +147,7 @@ vim.opt.relativenumber = true
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
-
-vim.opt.colorcolumn = "100"
+vim.opt.colorcolumn = '100'
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -166,17 +205,15 @@ vim.opt.wildmode = 'list:longest'
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
-
 -- :e %% to get current dir of the file
 --cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 vim.api.nvim_set_keymap('c', '%%', "getcmdtype() == ':' ? expand('%:h').'/' : '%%'", { expr = true })
 
 -- clear all buffers except current one
-vim.api.nvim_create_user_command("BufCurOnly", "%bdelete|edit#|bdelete#", {})
+vim.api.nvim_create_user_command('BufCurOnly', '%bdelete|edit#|bdelete#', {})
 
 -- Jump to the last position when reopening a file
-vim.api.nvim_command([[au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif]])
-
+vim.api.nvim_command [[au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif]]
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -184,6 +221,12 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+vim.diagnostic.config {
+  virtual_text = true,
+  signs = true,
+  update_in_insert = true,
+}
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -194,10 +237,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+-- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+-- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -207,6 +250,39 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- -- Open todo file with <leader>ot
+-- vim.keymap.set('n', '<leader>ot', function()
+--   vim.cmd 'edit ~/todofiles/todo.md'
+-- end, { desc = 'Open Todo file' })
+
+-- Open todo file in new tab or switch to existing tab with <leader>ot
+vim.keymap.set('n', '<leader>ot', function()
+  local todo_file = vim.fn.expand '~/todofiles/todo.md'
+
+  -- Check if the file is already open in any tab
+  for i = 1, vim.fn.tabpagenr '$' do
+    local buflist = vim.fn.tabpagebuflist(i)
+    for _, bufnr in ipairs(buflist) do
+      local bufname = vim.fn.bufname(bufnr)
+      if bufname == todo_file then
+        -- Switch to the existing tab
+        vim.cmd('tabnext ' .. i)
+        -- Check if buffer has unsaved changes
+        if vim.bo.modified then
+          print 'Warning: Buffer has unsaved changes. Use :edit! to force reload.'
+        else
+          vim.cmd 'edit!'
+        end
+        return
+      end
+    end
+  end
+
+  -- If not found in any tab, create directory if needed and open in new tab
+  vim.fn.mkdir(vim.fn.expand '~/todofiles', 'p')
+  vim.cmd('tabnew ' .. todo_file)
+end, { desc = 'Open and reload todo file in tab' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -234,8 +310,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
-
-
+vim.keymap.set('n', '<leader>gr', ':!go run %<CR>', { desc = '[G]o [r]un current file' })
 
 -- [[ Configure and install plugins ]]
 --
@@ -266,7 +341,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<F8>', '<cmd>:TagbarToggle<CR>')
       vim.g.tagbar_autofocus = true
       vim.g.tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
-    end
+    end,
   },
   -- Yank history navigation
   'vim-scripts/YankRing.vim',
@@ -292,8 +367,18 @@ require('lazy').setup({
   -- Show the content of the register on " or @ or <CTRL-R> in insert mode
   'junegunn/vim-peekaboo',
   -- Database
-  'tpope/vim-dadbod',
-  'kristijanhusak/vim-dadbod-ui',
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = { 'tpope/vim-dadbod', lazy = true },
+    init = function()
+      vim.g.db_ui_winwidth = 60
+      vim.g.db_ui_table_helpers = {
+        postgresql = {
+          Count = 'select count(*) from "{table}"',
+        },
+      }
+    end,
+  },
   -- diff 2 dir: DirDiff <dir1> <dir2>
   'will133/vim-dirdiff',
   -- Plantuml
@@ -302,17 +387,23 @@ require('lazy').setup({
   'fourjay/vim-hurl',
   -- github copilot
   'github/copilot.vim',
+  -- {
+  --   'zbirenbaum/copilot.lua',
+  --   config = function()
+  --     require('copilot').setup {}
+  --   end,
+  -- },
   --directory editor
   {
     'stevearc/oil.nvim',
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
     --dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     config = function()
-      require('oil').setup({
+      require('oil').setup {
         default_file_explorer = true,
-      })
-    end
+      }
+    end,
   },
   --required for oil
   'nvim-tree/nvim-web-devicons',
@@ -358,7 +449,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -404,7 +495,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -444,7 +535,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -493,7 +584,8 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>e', builtin.find_files, { desc = '[S]earch [F]iles' })
+      --vim.keymap.set('n', '<leader>e', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>j', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -552,7 +644,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -589,6 +681,19 @@ require('lazy').setup({
       --    function will be executed to configure the current buffer
       require('lspconfig').lua_ls.setup {}
       require('lspconfig').gopls.setup {}
+      require('lspconfig').yamlls.setup {
+        settings = {
+          yaml = {
+            schemas = {
+              ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json'] = '/*.k8s.yaml',
+            },
+          },
+        },
+      }
+      require('lspconfig').terraformls.setup {}
+      require('lspconfig').tflint.setup {}
+      require('lspconfig').ruby_lsp.setup {}
+      require('lspconfig').ts_ls.setup {}
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -737,6 +842,8 @@ require('lazy').setup({
           },
         },
         yamlls = {},
+        terraformls = {},
+        ts_ls = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -754,13 +861,14 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua',    -- Used to format Lua code
+        'stylua', -- Used to format Lua code
         'goimports', -- Used to format Go code
+        'goimports-reviser',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
-        ensure_installed = { 'gopls', 'lua_ls' },
+        ensure_installed = { 'gopls', 'lua_ls', 'terraformls' },
         automatic_installation = true,
         handlers = {
           function(server_name)
@@ -808,15 +916,6 @@ require('lazy').setup({
           lsp_format = lsp_format_opt,
         }
       end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        go = { 'goimports' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
-      },
     },
     config = function()
       require('conform').formatters.goimports = {
@@ -825,12 +924,21 @@ require('lazy').setup({
         --args = { '-local', 'github.com/metriodev/datasources', '-' },
         --to_stdin = true,
       }
-      require('conform').setup({
+      require('conform').setup {
         format_on_save = {
-          timeout_ms = 500,
+          timeout_ms = 5000,
           lsp_format = 'fallback',
         },
-      })
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          go = { 'goimports-reviser', lsp_format = 'first' },
+          -- Conform can also run multiple formatters sequentially
+          -- python = { "isort", "black" },
+          --
+          -- You can use 'stop_after_first' to run the first available formatter from the list
+          -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        },
+      }
     end,
   },
 
@@ -1110,12 +1218,12 @@ require('lazy').setup({
   --   end,
   -- },
   {
-    "andythigpen/nvim-coverage",
-    version = "*",
+    'andythigpen/nvim-coverage',
+    version = '*',
     config = function()
-      require("coverage").setup({
+      require('coverage').setup {
         auto_reload = true,
-      })
+      }
     end,
   },
   ---- Highlight todo, notes, etc in comments
@@ -1160,14 +1268,14 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
-    opts = {},
+  { -- markdown with mermaid support
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = 'cd app && npm install',
+    init = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+    end,
+    ft = { 'markdown' },
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -1201,7 +1309,6 @@ require('lazy').setup({
   -- to avoid that)
   'myusuf3/numbers.vim',
 
-
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1231,16 +1338,61 @@ require('lazy').setup({
 
   -- gitmoji
   {
-    "zakissimo/smoji.nvim",
-    cmd = "Smoji",
+    'zakissimo/smoji.nvim',
+    cmd = 'Smoji',
     keys = {
-      { "<leader><leader>e", "<cmd>Smoji<cr>", desc = "Git[e]moji" },
-      { "<C-e>",             "<cmd>Smoji<cr>", desc = "Git[e]moji", mode = "i" },
-      { "<C-e>",             "<cmd>Smoji<cr>", desc = "Git[e]moji", mode = "t" },
+      --{ '<leader><leader>e', '<cmd>Smoji<cr>', desc = 'Git[e]moji' },
+      { '<leader><leader>j', '<cmd>Smoji<cr>', desc = 'Gitemo[j]i' },
+      { '<C-e>', '<cmd>Smoji<cr>', desc = 'Git[e]moji', mode = 'i' },
+      { '<C-e>', '<cmd>Smoji<cr>', desc = 'Git[e]moji', mode = 't' },
     },
     config = function()
-      require("smoji")
+      require 'smoji'
     end,
+  },
+  'michaeljsmith/vim-indent-object',
+  {
+    'olimorris/codecompanion.nvim',
+    opts = {
+      --proxy = 'socks5://127.0.0.1:9000', -- [protocol://]host[:port] e.g. socks5://127.0.0.1:9999
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+  },
+  {
+    'okuuva/auto-save.nvim',
+    version = '^1.0.0', -- see https://devhints.io/semver, alternatively use '*' to use the latest tagged release
+    cmd = 'ASToggle', -- optional for lazy loading on command
+    event = { 'InsertLeave', 'TextChanged' }, -- optional for lazy loading on trigger events
+    opts = {
+      -- your config goes here
+      -- or just leave it empty :)
+    },
+  },
+  {
+    'jakewvincent/mkdnflow.nvim',
+    config = function()
+      require('mkdnflow').setup {
+        -- Config goes here; leave blank for defaults
+        mappings = {
+          MkdnToggleToDo = { 'n', '<leader>tt' },
+        },
+      }
+    end,
+  },
+  -- Sort.nvim:  intelligent sorting `:Sort` command
+  {
+    'sQVe/sort.nvim',
+    config = function()
+      require('sort').setup {
+        -- Optional configuration overrides.
+      }
+    end,
+  },
+  {
+    'AndrewRadev/splitjoin.vim',
   },
 }, {
   ui = {
@@ -1266,3 +1418,115 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'fugitive',
+  callback = function()
+    vim.keymap.set('n', '<leader>debug', function()
+      print('Buffer type: ' .. vim.bo.buftype)
+      print('File type: ' .. vim.bo.filetype)
+      print('Mode: ' .. vim.fn.mode())
+      print('Modifiable: ' .. tostring(vim.bo.modifiable))
+    end, { buffer = true })
+  end,
+})
+
+-- GoBuild
+vim.api.nvim_create_user_command('GoBuild', function(opts)
+  local file_dir = vim.fn.expand '%:p:h'
+
+  -- ✅ Parser les arguments *avant* les appels asynchrones
+  local user_args = vim.fn.split(vim.fn.expandcmd(opts.args), ' ')
+
+  -- Étape 1: Trouver le dossier du package avec `go list`
+  vim.system({ 'go', 'list', '-f', '{{.Dir}}' }, { cwd = file_dir, text = true }, function(pkg_info)
+    local pkg_dir = vim.trim(pkg_info.stdout)
+
+    -- Étape 2: Préparer la commande `go build` avec les arguments de l'utilisateur
+    local args = { 'go', 'build' }
+    vim.list_extend(args, user_args)
+
+    -- Étape 3: Exécuter `go build` dans le bon dossier
+    vim.system(args, { cwd = pkg_dir, text = true }, function(result)
+      vim.schedule(function()
+        if result.code == 0 then
+          print '✅ Build succeeded'
+          vim.cmd 'cclose'
+          return
+        end
+
+        print '❌ Build failed, populating quickfix list'
+
+        local qf_list = {}
+        for _, line in ipairs(vim.split(result.stdout .. result.stderr, '\n', { trimempty = true })) do
+          local file, lnum, col, msg = string.match(line, '([^:]+):(%d+):(%d+):%s(.+)')
+          if file and lnum and col and msg then
+            local abs_file = vim.fn.fnamemodify(pkg_dir .. '/' .. file, ':p')
+            table.insert(qf_list, {
+              filename = abs_file,
+              lnum = tonumber(lnum),
+              col = tonumber(col),
+              text = msg,
+            })
+          else
+            table.insert(qf_list, { text = line })
+          end
+        end
+
+        vim.fn.setqflist(qf_list, 'r')
+        vim.cmd 'copen'
+        if not opts.bang and #qf_list > 0 and qf_list[1].lnum then
+          vim.cmd 'cc'
+        end
+      end)
+    end)
+  end)
+end, {
+  bang = true,
+  nargs = '*',
+  complete = 'file',
+})
+vim.keymap.set('n', '<leader>gb', ':GoBuild<CR>', { desc = '[G]o [B]uild package' })
+vim.keymap.set('n', '<leader>gB', ':GoBuild!<CR>', { desc = '[G]o [B]uild (no jump)' })
+
+-- GoTest
+vim.api.nvim_create_user_command('GoTest', function(opts)
+  local pkg_dir = vim.fn.getcwd()
+
+  vim.system({ 'go', 'test', '-v', './...' }, {
+    text = true,
+    cwd = pkg_dir,
+  }, function(result)
+    vim.schedule(function()
+      local qf_list = {}
+      local lines = vim.split(result.stdout .. result.stderr, '\n', { trimempty = true })
+
+      for i = 1, #lines do
+        local line = vim.trim(lines[i])
+
+        -- Cherche une ligne avec Error Trace: /chemin/vers/fichier.go:123
+        local trace_file, trace_line = string.match(line, 'Error Trace:%s+(.+%.go):(%d+)')
+        if trace_file and trace_line then
+          local msg_line = vim.trim(lines[i + 1] or '')
+          local msg = msg_line:match '^Error:%s+(.+)$' or '(test failed)'
+
+          table.insert(qf_list, {
+            filename = trace_file,
+            lnum = tonumber(trace_line),
+            col = 1,
+            text = msg,
+          })
+        end
+      end
+
+      vim.fn.setqflist(qf_list, 'r')
+      vim.cmd 'copen'
+
+      if not opts.bang and #qf_list > 0 then
+        vim.cmd 'cc'
+      end
+    end)
+  end)
+end, { bang = true })
+vim.keymap.set('n', '<leader>gt', ':GoTest<CR>', { desc = 'Go Test package' })
+vim.keymap.set('n', '<leader>gT', ':GoTest!<CR>', { desc = 'Go Test (no jump)' })

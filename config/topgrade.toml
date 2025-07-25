@@ -3,7 +3,7 @@
 #assume_yes = true
 
 # Disable specific steps - same options as the command line flag
-disable = ["asdf", "containers", "gem", "git_repos", "node", "poetry", "tldr"]
+disable = ["asdf", "containers", "gem", "git_repos", "node", "poetry", "tldr", "vscodium", "ruby_gems"]
 
 # Ignore failures for these steps
 #ignore_failures = ["powershell"]
