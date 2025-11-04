@@ -1,4 +1,4 @@
---[[
+--[[v0.12.8
 
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
@@ -298,6 +298,20 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- map J to : when in fugitive buffers
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'fugitive',
+  callback = function()
+    -- Restore : for command mode in fugitive buffers
+    --vim.keymap.set('n', ':', ':', { buffer = true })
+    vim.keymap.set('n', 'j', ';', { buffer = true })
+    vim.keymap.set('n', 'J', ':', { buffer = true })
+  end,
+})
+-- add mapping for diffput and diffget
+vim.keymap.set('n', '<leader>dg', '<cmd>:diffget<CR>', { desc = '[D]iff[G]et' })
+vim.keymap.set('n', '<leader>dp', '<cmd>:diffput<CR>', { desc = '[D]iff[P]ut' })
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -341,6 +355,18 @@ require('lazy').setup({
       vim.keymap.set('n', '<F8>', '<cmd>:TagbarToggle<CR>')
       vim.g.tagbar_autofocus = true
       vim.g.tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
+    end,
+  },
+  {
+    'hedyhli/outline.nvim',
+    config = function()
+      -- Example mapping to toggle outline
+      vim.keymap.set('n', '<leader>oo', '<cmd>Outline<CR>', { desc = 'Toggle Outline' })
+      --vim.keymap.set('n', '<F8>', '<cmd>Outline<CR>')
+
+      require('outline').setup {
+        -- Your setup opts here (leave empty to use defaults)
+      }
     end,
   },
   -- Yank history navigation
@@ -559,15 +585,17 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local actions = require 'telescope.actions'
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = { ['<CR>'] = actions.send_selected_to_qflist + actions.open_qflist },
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -679,21 +707,31 @@ require('lazy').setup({
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
-      require('lspconfig').lua_ls.setup {}
-      require('lspconfig').gopls.setup {}
-      require('lspconfig').yamlls.setup {
+      --require('lspconfig').lua_ls.setup {}
+      vim.lsp.config('buf_ls', {})
+      vim.lsp.config('lua_ls', {})
+      --require('lspconfig').gopls.setup {}
+      vim.lsp.config('gopls', {})
+      --require('lspconfig').yamlls.setup {}
+      vim.lsp.config('yamlls', {
         settings = {
           yaml = {
+            --format = { enable = true },
+            format = { enable = false },
             schemas = {
               ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json'] = '/*.k8s.yaml',
             },
           },
         },
-      }
-      require('lspconfig').terraformls.setup {}
-      require('lspconfig').tflint.setup {}
-      require('lspconfig').ruby_lsp.setup {}
-      require('lspconfig').ts_ls.setup {}
+      })
+      --require('lspconfig').terraformls.setup {}
+      vim.lsp.config('terraformls', {})
+      --require('lspconfig').tflint.setup {}
+      vim.lsp.config('tflint', {})
+      --require('lspconfig').ruby_lsp.setup {}
+      vim.lsp.config('ruby_lsp', {})
+      --require('lspconfig').ts_ls.setup {}
+      vim.lsp.config('lspconfig', {})
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -757,7 +795,7 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -784,7 +822,7 @@ require('lazy').setup({
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
@@ -820,6 +858,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
+        buf_ls = {},
         gopls = {
           settings = {
             gopls = {
@@ -868,7 +907,7 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
-        ensure_installed = { 'gopls', 'lua_ls', 'terraformls' },
+        ensure_installed = { 'buf_ls', 'gopls', 'lua_ls', 'terraformls' },
         automatic_installation = true,
         handlers = {
           function(server_name)
@@ -1078,31 +1117,30 @@ require('lazy').setup({
       vim.cmd.hi 'Comment gui=none'
     end,
   },
-  -- neotest
-  --{ 'fredrikaverpil/neotest-golang' },
+  -- neotest and adapters
   {
     'nvim-neotest/neotest',
-    requires = {
+    dependencies = {
       'nvim-neotest/nvim-nio',
       'nvim-lua/plenary.nvim',
       'antoinemadec/FixCursorHold.nvim',
       'nvim-treesitter/nvim-treesitter',
-      --{ 'fredrikaverpil/neotest-golang', version = "*" },
-      'nvim-neotest/neotest-go',
+      'fredrikaverpil/neotest-golang',
     },
     opts = {
       summary = {
         animated = true,
       },
     },
-    -- config = function()
-    --   local neotest_golang_opts = { go_test_args = { '-v' } } -- Specify custom configuration
-    --   require("neotest").setup({
-    --     adapters = {
-    --       require("neotest-golang")(neotest_golang_opts), -- Registration
-    --     },
-    --   })
-    -- end,
+    config = function()
+      require('neotest').setup {
+        adapters = {
+          require 'neotest-golang' {
+            go_test_args = { '-v' },
+          },
+        },
+      }
+    end,
     keys = {
       {
         '<leader>ta',
@@ -1190,33 +1228,6 @@ require('lazy').setup({
       },
     },
   },
-
-  -- {
-  --   'nvim-neotest/neotest',
-  --   dependencies = {
-  --     "nvim-neotest/nvim-nio",
-  --     "nvim-lua/plenary.nvim",
-  --     "antoinemadec/FixCursorHold.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     {
-  --       "fredrikaverpil/neotest-golang",
-  --       version = "*",
-  --       dependencies = {
-  --         "andythigpen/nvim-coverage",
-  --       },
-  --     },
-  --     "nvim-contrib/nvim-ginkgo",
-  --   },
-  --   config = function()
-  --     local neotest_golang_opts = {} -- Specify custom configuration
-  --     require("neotest").setup({
-  --       adapters = {
-  --         require("neotest-golang")(neotest_golang_opts), -- Registration
-  --         require("nvim-ginkgo"),                         -- Registration
-  --       },
-  --     })
-  --   end,
-  -- },
   {
     'andythigpen/nvim-coverage',
     version = '*',
@@ -1318,7 +1329,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
@@ -1353,12 +1364,15 @@ require('lazy').setup({
   'michaeljsmith/vim-indent-object',
   {
     'olimorris/codecompanion.nvim',
-    opts = {
-      --proxy = 'socks5://127.0.0.1:9000', -- [protocol://]host[:port] e.g. socks5://127.0.0.1:9999
-    },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
+    },
+    opts = {
+      opts = {
+        log_level = 'debug',
+      },
+      --proxy = 'socks5://127.0.0.1:9000', -- [protocol://]host[:port] e.g. socks5://127.0.0.1:9999
     },
   },
   {
@@ -1378,6 +1392,7 @@ require('lazy').setup({
         -- Config goes here; leave blank for defaults
         mappings = {
           MkdnToggleToDo = { 'n', '<leader>tt' },
+          MkdnTableNextCell = { 'i', '<S-Tab>' }, -- disable default mapping
         },
       }
     end,
@@ -1489,6 +1504,16 @@ end, {
 vim.keymap.set('n', '<leader>gb', ':GoBuild<CR>', { desc = '[G]o [B]uild package' })
 vim.keymap.set('n', '<leader>gB', ':GoBuild!<CR>', { desc = '[G]o [B]uild (no jump)' })
 
+-- target tab
+-- Using leader key (usually space or comma)
+vim.keymap.set('n', '<leader>1', '1gt', { desc = 'Go to tab 1' })
+vim.keymap.set('n', '<leader>2', '2gt', { desc = 'Go to tab 2' })
+vim.keymap.set('n', '<leader>3', '3gt', { desc = 'Go to tab 3' })
+vim.keymap.set('n', '<leader>4', '4gt', { desc = 'Go to tab 4' })
+vim.keymap.set('n', '<leader>5', '5gt', { desc = 'Go to tab 5' })
+vim.keymap.set('n', '<leader>6', '6gt', { desc = 'Go to tab 6' })
+vim.keymap.set('n', '<leader>7', '7gt', { desc = 'Go to tab 7' })
+
 -- GoTest
 vim.api.nvim_create_user_command('GoTest', function(opts)
   local pkg_dir = vim.fn.getcwd()
@@ -1530,3 +1555,44 @@ vim.api.nvim_create_user_command('GoTest', function(opts)
 end, { bang = true })
 vim.keymap.set('n', '<leader>gt', ':GoTest<CR>', { desc = 'Go Test package' })
 vim.keymap.set('n', '<leader>gT', ':GoTest!<CR>', { desc = 'Go Test (no jump)' })
+
+vim.api.nvim_create_user_command('GoBuildTraceDep', function()
+  local project_root = vim.fn.getcwd()
+  local go_files = vim.fn.globpath(project_root, '**/*.go', false, true)
+  local errors = {}
+  local done = 0
+
+  print '⏳ Analyse de la source des erreurs...'
+
+  for _, file in ipairs(go_files) do
+    vim.system({ 'go', 'build', file }, { text = true }, function(res)
+      done = done + 1
+      if res.code ~= 0 and res.stderr:find 'k8s.io/kube%-openapi' then
+        table.insert(errors, { file = file, output = res.stderr })
+      end
+      if done == #go_files then
+        vim.schedule(function()
+          if #errors == 0 then
+            print '✅ Aucun fichier ne semble causer directement l’erreur.'
+          else
+            vim.cmd 'cclose'
+            local qf_list = {}
+            for _, err in ipairs(errors) do
+              for _, line in ipairs(vim.split(err.output, '\n', { trimempty = true })) do
+                table.insert(qf_list, {
+                  filename = err.file,
+                  lnum = 1,
+                  col = 1,
+                  text = line,
+                })
+              end
+            end
+            vim.fn.setqflist(qf_list, 'r')
+            vim.cmd 'copen'
+            vim.cmd 'cc'
+          end
+        end)
+      end
+    end)
+  end
+end, {})
