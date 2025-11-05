@@ -70,6 +70,7 @@ corpo() {
     # export HTTPS_PROXY="http://127.0.0.1:9000"
     export SSL_CERT_FILE=~/ZscalerRootCertificate-2048-SHA256.crt 
     export REQUESTS_CA_BUNDLE=~/ZscalerRootCertificate-2048-SHA256.crt
+    export SSL_CERT_DIR=~/
     export CORPO_NET=true
     # export ZSCALER_CERT=$(cat ~/ZscalerRootCertificate-2048-SHA256.crt)
 }
@@ -155,3 +156,8 @@ alias nvim-kickstart='NVIM_APPNAME="nvim-kickstart" nvim'
 
 . "$HOME/.atuin/bin/env"
 . "$HOME/.cargo/env"
+
+
+export KUBE_EDITOR=nvim
+
+
