@@ -6,3 +6,5 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Created by `pipx` on 2022-05-22 12:14:59
 export PATH="$PATH:/home/pgranger/.local/bin"
+
+. "$HOME/.atuin/bin/env"

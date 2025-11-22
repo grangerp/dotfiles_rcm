@@ -107,3 +107,10 @@ export GH_USERNAME=grangerp
 
 # Created by `pipx` on 2022-05-22 12:14:59
 export PATH="$PATH:/home/pgranger/.local/bin"
+. "$HOME/.cargo/env"
+
+. "$HOME/.atuin/bin/env"
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash --disable-up-arrow)"
+source /home/pgranger/Downloads/alacritty/extra/completions/alacritty.bash
